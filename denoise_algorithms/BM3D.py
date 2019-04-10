@@ -2,46 +2,52 @@ import numpy
 import cv2
 from denoise_algorithms.ADenoiser import *
 # this code from https://github.com/wuqiyao20160118/
-# this algorithm have more params
-# TODO
-
 # Parameters initialization
-sigma = 25
-
-Threshold_Hard3D = 2.7 * sigma  # Threshold for Hard Thresholding
-First_Match_threshold = 2500  # 用于计算block之间相似度的阈值
-Step1_max_matched_cnt = 16  # 组最大匹配的块数
-Step1_Blk_Size = 8  # block_Size即块的大小，8*8
-Step1_Blk_Step = 3  # Rather than sliding by one pixel to every next reference block, use a step of Nstep pixels in both horizontal and vertical directions.
-Step1_Search_Step = 3  # 块的搜索step
-Step1_Search_Window = 39  # Search for candidate matching blocks in a local neighborhood of restricted size NS*NS centered
-
-Second_Match_threshold = 400  # 用于计算block之间相似度的阈值
-Step2_max_matched_cnt = 32
-Step2_Blk_Size = 8
-Step2_Blk_Step = 3
-Step2_Search_Step = 3
-Step2_Search_Window = 39
-Beta_Kaiser = 2.0
-
 class BM3D(ADenoiser):
 	def __init__(self,params=None):
 		if params is None:
-			self.template_size = 100
-			self.search_size = 250
+			self.sigma = 25
+
+			self.Threshold_Hard3D = 2.7 * self.sigma  # Threshold for Hard Thresholding
+			self.First_Match_threshold = 2500  # 用于计算block之间相似度的阈值
+			self.Step1_max_matched_cnt = 16  # 组最大匹配的块数
+			self.Step1_Blk_Size = 8  # block_Size即块的大小，8*8
+			self.Step1_Blk_Step = 3  # Rather than sliding by one pixel to every next reference block, use a step of Nstep pixels in both horizontal and vertical directions.
+			self.Step1_Search_Step = 3  # 块的搜索step
+			self.Step1_Search_Window = 39  # Search for candidate matching blocks in a local neighborhood of restricted size NS*NS centered
+
+			self.Second_Match_threshold = 400  # 用于计算block之间相似度的阈值
+			self.Step2_max_matched_cnt = 32
+			self.Step2_Blk_Size = 8
+			self.Step2_Blk_Step = 3
+			self.Step2_Search_Step = 3
+			self.Step2_Search_Window = 39
+			#Beta_Kaiser = 2.0
 			ADenoiser.__init__(self, "BM3D")
 		else:
 			ADenoiser.__init__(self,"BM3D", params)
 
 	def __str__(self):
+		string = ""
 		info 				= "name: "		+ str(self.name)
-		template_size_str	= "template_size: "		+ str(self.template_size)
-		search_size_str		= "search_size: "	+ str(self.search_size)
+		string+= ("sigma: "+str(self.sigma) + '\n')
+		string+= ("Threshold_Hard3D: "+str(self.Threshold_Hard3D) + '\n')
+		string+= ("First_Match_threshold: "+str(self.First_Match_threshold) + '\n')
+		string+= ("Step1_max_matched_cnt: "+str(self.Step1_max_matched_cnt) + '\n')
+		string+= ("Step1_Blk_Size: "+str(self.Step1_Blk_Size) + '\n')
+		string+= ("Step1_Blk_Step: "+str(self.Step1_Blk_Step) + '\n')
+		string+= ("Step1_Search_Step: "+str(self.Step1_Search_Step) + '\n')
+		string+= ("Step1_Search_Window: "+str(self.Step1_Search_Window) + '\n')
+		string+= ("Second_Match_threshold: "+str(self.Second_Match_threshold) + '\n')
+		string+= ("Step2_max_matched_cnt: "+str(self.Step2_max_matched_cnt) + '\n')
+		string+= ("Step2_Blk_Size: "+str(self.Step2_Blk_Size) + '\n')
+		string+= ("Step2_Blk_Step: "+str(self.Step2_Blk_Step) + '\n')
+		string+= ("Step2_Search_Step: "+str(self.Step2_Search_Step) + '\n')
+		string+= ("Step2_Search_Window: "+str(self.Step2_Search_Window))
 
-		return info + "\n" + template_size_str + "\n" + search_size_str
-
+		return string
 	def get_name(self):
-		ADenoiser.get_name(self)
+		return ADenoiser.get_name(self)
 
 	def __Locate_blk(self,i, j, blk_step, block_size, width, height):
 		if i * blk_step + block_size < width:
@@ -81,13 +87,13 @@ class BM3D(ADenoiser):
 			y_min = img.shape[0] - WindowSize
 		return numpy.array((x_min, y_min), dtype=int)
 
-	def __step1_fast_match(img, BlockPoint):
+	def __step1_fast_match(self, img, BlockPoint):
 		x, y = BlockPoint
-		blk_size = Step1_Blk_Size
-		Search_Step = Step1_Search_Step
-		Threshold = First_Match_threshold
-		max_matched = Step1_max_matched_cnt
-		window_size = Step1_Search_Window
+		blk_size = self.Step1_Blk_Size
+		Search_Step = self.Step1_Search_Step
+		Threshold = self.First_Match_threshold
+		max_matched = self.Step1_max_matched_cnt
+		window_size = self.Step1_Search_Window
 
 		blk_positions = numpy.zeros((max_matched, 2), dtype=int)
 		similar_blocks_3d = numpy.zeros((max_matched, blk_size, blk_size), dtype=float)
@@ -136,7 +142,7 @@ class BM3D(ADenoiser):
 		for i in range(similar_blocks.shape[1]):
 			for j in range(similar_blocks.shape[2]):
 				harr_img = cv2.dct(similar_blocks[:, i, j].astype(numpy.float64))
-				harr_img[numpy.abs(harr_img) < Threshold_Hard3D] = 0
+				harr_img[numpy.abs(harr_img) < self.Threshold_Hard3D] = 0
 				nonzero_count += harr_img.nonzero()[0].size
 				similar_blocks[:, i, j] = cv2.idct(harr_img)[0]
 		return similar_blocks, nonzero_count
@@ -156,8 +162,8 @@ class BM3D(ADenoiser):
 
 	def __BM3D_step_1(self, img):
 		width, height = img.shape
-		block_size = Step1_Blk_Size
-		blk_step = Step1_Blk_Step
+		block_size = self.Step1_Blk_Size
+		blk_step = self.Step1_Blk_Step
 		width_num = int((width - block_size) / blk_step)
 		height_num = int((height - block_size) / blk_step)
 		filtered_img = numpy.zeros(img.shape, dtype=float)
@@ -179,11 +185,11 @@ class BM3D(ADenoiser):
 
 	def __step2_fast_match(self, basic_img, img, BlockPoint):
 		x, y = BlockPoint
-		blk_size = Step2_Blk_Size
-		Threshold = Second_Match_threshold
-		Search_Step = Step2_Search_Step
-		max_matched = Step2_max_matched_cnt
-		window_size = Step2_Search_Window
+		blk_size = self.Step2_Blk_Size
+		Threshold = self.Second_Match_threshold
+		Search_Step = self.Step2_Search_Step
+		max_matched = self.Step2_max_matched_cnt
+		window_size = self.Step2_Search_Window
 
 		blk_positions = numpy.zeros((max_matched, 2), dtype=int)
 		similar_blocks_3d = numpy.zeros((max_matched, blk_size, blk_size), dtype=float)
@@ -249,10 +255,10 @@ class BM3D(ADenoiser):
 				temp_vector = similar_basic_blocks[:, i, j]
 				dct_temp = cv2.dct(temp_vector)
 				norm2 = numpy.matmul(dct_temp.T, dct_temp)
-				filter_weight = norm2 / (norm2 + sigma ** 2)
+				filter_weight = norm2 / (norm2 + self.sigma ** 2)
 				if filter_weight != 0:
 					Wiener_weight[i, j] = 1 / (filter_weight ** 2)
-				# Wiener_weight[i, j] = 1 / (filter_weight**2 * sigma**2)
+				# Wiener_weight[i, j] = 1 / (filter_weight**2 * self.sigma**2)
 				temp_vector = similar_blocks[:, i, j]
 				dct_temp = cv2.dct(temp_vector) * filter_weight
 				similar_basic_blocks[:, i, j] = cv2.idct(dct_temp)[0]
@@ -272,8 +278,8 @@ class BM3D(ADenoiser):
 
 	def __BM3D_step_2(self, basic_img, img):
 		width, height = img.shape
-		block_size = Step2_Blk_Size
-		blk_step = Step2_Blk_Step
+		block_size = self.Step2_Blk_Size
+		blk_step = self.Step2_Blk_Step
 		width_num = int((width - block_size) / blk_step)
 		height_num = int((height - block_size) / blk_step)
 		filtered_img = numpy.zeros(img.shape, dtype=float)
@@ -293,6 +299,18 @@ class BM3D(ADenoiser):
 
 		return filtered_img
 
-	def denoise(self, image):
-		denoised_img = self.__BM3D_step_1(image)
-		final_denoised_img = self.__BM3D_step_2(denoised_img, image)
+	def denoise(self, dataImage):
+		(image, name) = self.get_img_name(dataImage)
+
+		denoised_img = numpy.zeros(image.shape)
+		final_denoised_img = numpy.zeros(image.shape)
+
+		for ch in range(3):
+			denoised_img[:,:,ch] = self.__BM3D_step_1(image[:,:,ch])
+			final_denoised_img[:,:,ch] = self.__BM3D_step_2(denoised_img[:,:,ch], image[:,:,ch])
+
+		if self.dImgs.get(name) is None:
+			self.dImgs[name] = list()
+
+		self.dImgs[name].append(Pair(final_denoised_img, self.params))
+		return final_denoised_img

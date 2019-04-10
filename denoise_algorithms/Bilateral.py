@@ -21,7 +21,7 @@ class Bilateral(ADenoiser):
 		return info + "\n" + diameter_str + "\n" + sigma_i_str + "\n" +  sigma_s_str
 
 	def get_name(self):
-		ADenoiser.get_name(self)
+		return ADenoiser.get_name(self)
 
 	def __gaussian(self, x, sigma):
 		return (1.0 / (2 * numpy.pi * (sigma ** 2))) * numpy.exp(-(x ** 2) / (2 * (sigma ** 2)))
@@ -29,18 +29,21 @@ class Bilateral(ADenoiser):
 	def __distance(self, x1, y1, x2, y2):
 		return numpy.sqrt(numpy.abs((x1 - x2) ** 2 - (y1 - y2) ** 2))
 
-	def denoise(self, image):
-		print(self)
+	def denoise(self, dataImage):
+		(image, name) = self.get_img_name(dataImage)
+
 		if self.params is not None:
 			self.diameter = self.params.diameter
-			self.sigma_i = self.params.sigma_i
-			self.sigma_s = self.params.sigma_s
+			self.sigma_i  = self.params.sigma_i
+			self.sigma_s  = self.params.sigma_s
 
-		print("max:" + str(numpy.max(image)))
-		print("min:" + str(numpy.min(image)))
-		#sigmaColor=self.sigma_i
-		#sigmaSpace=self.sigma_s
-		return cv2.bilateralFilter(image.astype("uint8"), self.diameter, self.sigma_i, self.sigma_s)
+		denoise_image = cv2.bilateralFilter(image.astype("uint8"), self.diameter, self.sigma_i, self.sigma_s)
+		if self.dImgs.get(name) is None:
+			self.dImgs[name] = list()
+
+		self.dImgs[name].append(Pair(denoise_image, self.params))
+
+		return denoise_image
 
 	def __bilateral_filter(self,image, diameter, sigma_i, sigma_s):
 		new_image = numpy.zeros(image.shape)

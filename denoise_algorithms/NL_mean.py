@@ -5,8 +5,8 @@ from denoise_algorithms.ADenoiser import *
 class NL_mean(ADenoiser):
 	def __init__(self,params=None):
 		if params is None:
-			self.template_size = 100
-			self.search_size = 250
+			self.template_size = 7
+			self.search_size = 7
 			ADenoiser.__init__(self, "NL_mean")
 		else:
 			ADenoiser.__init__(self,"NL_mean", params)
@@ -19,17 +19,20 @@ class NL_mean(ADenoiser):
 		return info + "\n" + template_size_str + "\n" + search_size_str
 
 	def get_name(self):
-		ADenoiser.get_name(self)
+		return ADenoiser.get_name(self)
 
-	def denoise(self, image):
-		print(self)
+	def denoise(self, dataImage):
+		(image, name) = self.get_img_name(dataImage)
 		if self.params is not None:
 			self.template_size = self.params.template_size
 			self.search_size = self.params.search_size
 
-		print("max:" + str(numpy.max(image)))
-		print("min:" + str(numpy.min(image)))
-		denoised_im = image.copy()
+		denoised_im = numpy.zeros_like(image)
+		cv2.fastNlMeansDenoisingColored(image.astype("uint8"), dst=denoised_im,h=16,templateWindowSize=4,hColor=10)
 
-		return cv2.fastNlMeansDenoisingColored(image.astype("uint8"))
+		if self.dImgs.get(name) is None:
+			self.dImgs[name] = list()
+
+		self.dImgs[name].append(Pair(denoised_im, self.params))
+		return denoised_im
 

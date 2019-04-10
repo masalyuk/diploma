@@ -5,8 +5,8 @@ from denoise_algorithms.ADenoiser import *
 class TVL1(ADenoiser):
 	def __init__(self,params=None):
 		if params is None:
-			self.iter = 100
-			self.lyambda = 250
+			self.iter = 1000
+			self.lyambda = 100000
 			ADenoiser.__init__(self, "TVL1")
 		else:
 			ADenoiser.__init__(self,"TVL!", params)
@@ -19,17 +19,26 @@ class TVL1(ADenoiser):
 		return info + "\n" + iter_str + "\n" + lymbda_str
 
 	def get_name(self):
-		ADenoiser.get_name(self)
+		return ADenoiser.get_name(self)
 
-	def denoise(self, image):
-		print(self)
+
+	#image - class image
+	def denoise(self, dataImage):
+		(image, name) = self.get_img_name(dataImage)
 		if self.params is not None:
 			self.iter = self.params.iter
 			self.lyambda = self.params.lyambda
 
-		print("max:" + str(numpy.max(image)))
-		print("min:" + str(numpy.min(image)))
-		denoised_im = image.copy()
-		cv2.denoise_TVL1(image.astype("uint8"),denoised_im, self.lyambda, self.iter)
+		denoised_im = numpy.zeros_like(image)
+		print(self)
+
+		cv2.denoise_TVL1(observations=denoised_im, result=image)
+		cv2.imwrite("lkkkkk.jpg", denoised_im)
+
+		if self.dImgs.get(name) is None:
+			self.dImgs[name] = list()
+
+		self.dImgs[name].append(Pair(denoised_im, self.params))
+
 		return denoised_im
 
