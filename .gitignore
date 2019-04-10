@@ -1,2 +1,5 @@
 *.suka
 denoised/
+*.synctex.gz
+*.log
+*.aux
