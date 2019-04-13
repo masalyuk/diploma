@@ -3,3 +3,5 @@ denoised/
 *.synctex.gz
 *.log
 *.aux
+*.xml
+*.iml
