@@ -5,3 +5,7 @@ denoised/
 *.aux
 *.xml
 *.iml
+__pycache__/
+denoise_algorithms/__pycache__/
+images/lena256gray.png
+literatures/
