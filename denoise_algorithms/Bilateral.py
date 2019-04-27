@@ -3,22 +3,15 @@ import cv2
 from denoise_algorithms.ADenoiser import *
 
 class Bilateral(ADenoiser):
-	def __init__(self,params=None):
+	def __init__(self,	params=None):
+
 		if params is None:
-			self.diameter = 21
-			self.sigma_i = 250
-			self.sigma_s = 1
-			ADenoiser.__init__(self, "bileteral")
-		else:
-			ADenoiser.__init__(self,"bileteral", params)
+			self.params = {}
+			self.params["diameter"] = 21
+			self.params["sigma_i"] = 250
+			self.params["sigma_s"] = 1
 
-	def __str__(self):
-		info 			= "name: "		+ str(self.name)
-		diameter_str	= "diameter: "	+ str(self.diameter)
-		sigma_i_str		= "sigma_i: "	+ str(self.sigma_i)
-		sigma_s_str		= "sigma_s: "	+ str(self.sigma_s)
-
-		return info + "\n" + diameter_str + "\n" + sigma_i_str + "\n" +  sigma_s_str
+		ADenoiser.__init__(self,"Bilateral", params)
 
 	def get_name(self):
 		return ADenoiser.get_name(self)
@@ -30,22 +23,11 @@ class Bilateral(ADenoiser):
 		return numpy.sqrt(numpy.abs((x1 - x2) ** 2 - (y1 - y2) ** 2))
 
 	def denoise(self, dataImage):
-		(image, name) = self.get_img_name(dataImage)
 
-		if self.params is not None:
-			self.diameter = self.params.diameter
-			self.sigma_i  = self.params.sigma_i
-			self.sigma_s  = self.params.sigma_s
-
-		denoise_image = cv2.bilateralFilter(image.astype("uint8"), self.diameter, self.sigma_i, self.sigma_s)
-		if self.dImgs.get(name) is None:
-			self.dImgs[name] = list()
-
-		self.dImgs[name].append(Pair(denoise_image, self.params))
-
+		denoise_image = self.__bilateral_filter(dataImage.astype("uint8").copy(), self.params["diameter"], self.params["sigma_i"], self.params["sigma_s"])
 		return denoise_image
 
-	def __bilateral_filter(self,image, diameter, sigma_i, sigma_s):
+	def __bilateral_filter(self, image, diameter, sigma_i, sigma_s):
 		new_image = numpy.zeros(image.shape)
 		for row in range(len(image)):
 			for col in range(len(image[0])):
@@ -66,4 +48,5 @@ class Bilateral(ADenoiser):
 						wp_total = wp_total + wp
 				filtered_image = filtered_image // wp_total
 				new_image[row][col] = numpy.round(filtered_image).astype("uint8")
+
 		return new_image

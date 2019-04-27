@@ -1,38 +1,18 @@
 import numpy
-
-class Pair:
-	first=None
-	second=None
-
-	def __init__(self, f, s):
-		self.f = f
-		self.s = s
-
-	def first(self):
-		return self.f
-
-	def second(self):
-		return self.s
-
+""" TODO ADD EQUAL OPERATOR. IT COMPARE NAME OF ALG AND PARAM"""
+""" TODO ADD VALIDATE PARAM """
 class ADenoiser:
-	dImgs = None #dictionary of pair(image, param)
-	name = "ADenoiser"
-	params = None
 	def __init__(self, name, params=None):
 		self.name = name
-		self.params = params
-		self.dImgs = {}
-		#self.set_parameters(self, params)
+		if params is None:
+			self.params = {}
+		else:
+			self.params = params
 
 	def set_parameters(self, params):
 		self.params = params
 
-	def get_img_name(self, image):
-		return (image.im_n, image.name)
-
 	def get_name(self):
-
-		print(self.name)
 		return self.name
 
 	def disp_parameters(self):
@@ -40,3 +20,16 @@ class ADenoiser:
 
 	def denoise(self, image):
 		pass
+
+	def __str__(self):
+		info = "Name of alg: " + name + "\n"
+
+		pairs = self.params.items()
+
+		for pair in pairs:
+			name_of_param = pair[0]
+			value_of_param = pair[1]
+
+			info += name_of_param + ": " + str(value_of_param) + "\n"
+
+		return info

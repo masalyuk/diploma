@@ -6,22 +6,13 @@ from denoise_algorithms.ADenoiser import *
 class MF(ADenoiser):
 	def __init__(self, params=None):
 		if params is None:
-			self.covar = 1
-			self.max_diff = 1
-			self.weight_diff = 1
-			self.iterations = 2
-			ADenoiser.__init__(self, "MF")
-		else:
-			ADenoiser.__init__(self, "MF", params)
+			self.params = {}
+			self.params["covar"] = 1
+			self.params["max_diff"] = 1
+			self.params["weight_diff"] = 1
+			self.params["iterations"] = 2
 
-	def __str__(self):
-		info 		= "name: " 			+ str(self.name)
-		covar 		= "covar: " 		+ str(self.covar)
-		max_diff 	= "max_diff: " 		+ str(self.max_diff)
-		weight_diff = "weight_diff: "	+ str(self.weight_diff)
-		iterations 	= "iterations: " 	+ str(self.iterations)
-
-		return info + "\n" + covar + "\n" + max_diff + "\n" + weight_diff + "\n" + iterations
+		ADenoiser.__init__(self, "MF", params)
 
 	def dif_color(self, val1, val2, type="GRAY"):
 		if type == "RGB":
@@ -121,29 +112,10 @@ class MF(ADenoiser):
 	def get_name(self):
 		return ADenoiser.get_name(self)
 
-	# dataImage - class image
 	def denoise(self, dataImage):
-		(image, name) = self.get_img_name(dataImage)
 
-		if self.params is not None:
-
-			self.covar = self.params.covar
-			self.max_diff = self.params.max_diff
-			self.weight_diff = self.params.weight_diff
-			self.iterations = self.params.iterations
-
-		denoised_im = image.copy()
+		denoised_im = numpy.zeros_like(dataImage)
 		for ch in range(3):
-			denoised_im[:,:,ch] = self.restore_image(image[:,:,ch])
-
-		if self.dImgs.get(name) is None:
-			self.dImgs[name] = list()
-
-		self.dImgs[name].append(Pair(denoised_im, self.params))
+			denoised_im[:,:,ch] = self.restore_image(dataImage[:,:,ch])
 
 		return denoised_im
-
-
-
-
-

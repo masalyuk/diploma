@@ -5,6 +5,12 @@ import os
 import fnmatch
 import math
 import random
+import matplotlib.pyplot as plt
+from  skimage.util import  random_noise
+
+from image import *
+from result import *
+from storage import *
 
 from denoise_algorithms.Bilateral import *
 from denoise_algorithms.TVL1 import *
@@ -13,69 +19,9 @@ from denoise_algorithms.BM3D import *
 from denoise_algorithms.MF import *
 from denoise_algorithms.Guided import *
 
-class DataImage:
-	im = None
-	im_n = None # image with noise
-	name = "" # name of image
-	err_b = -1
-	def __init__(self, im, name):
-		self.im = im
-		self.name = name
-
-	def __generate_error(self, arr, err_b):
-		val = arr.copy()
-
-		(w,h,c)= val.shape
-		print("i:%d j:%d k:%d" % (w, h, c))
-		for i in range(w):
-			for j in range(h):
-				for k in range(c):
-					var = 0
-					for n in range(8):
-						if random.uniform(0, 1) < err_b:
-							var += 1
-						var = var << 1
-
-					val[i, j, k] = val[i, j, k] ^ var
-
-		return val
-
-	def add_noise(self, snr=20, pastushok=True):
-		img = self.im
-		if pastushok:
-			row, col, ch = img.shape
-			self.err_b = 0.01
-
-			#cv2.imshow("ddd", self.__generate_error(img, 0.001))
-			self.im_n =self.__generate_error(img, self.err_b)
-			return self.im_n
-		else:
-			row, col, ch = img.shape
-			mean = 0
-			var = 1.2
-			sigma = var ** snr
-
-			gauss = numpy.random.normal(mean, sigma, (row, col, ch))
-			gauss = gauss.reshape(row, col, ch)
-
-			noisy = numpy.clip(img + gauss, a_min=0, a_max=255)
-			self.im_n = noisy
-			return noisy
-
-def load_image(path_image):
-	im = cv2.imread(path_image)
-	return im
-
-def load_images(dir, count=-1):
-	files = os.listdir(dir)
-	mask = "*jpg"
-	ims = list()
-	for file in files:
-		if count is -1 or (fnmatch.fnmatch(file, mask) and count > len(ims)):
-			ims.append(DataImage(load_image(dir + "/" + file), file))
-
-	return ims
-
+def add_gauss_noise(img, variance):
+	print("VAR:" + str(variance))
+	return random_noise(img.copy()/255, mode='gaussian', var=variance, clip=True) * 255
 
 def PSNR_list(img, list_img_noise):
 	list_psnr = list()
@@ -85,7 +31,6 @@ def PSNR_list(img, list_img_noise):
 
 	return list_psnr
 
-
 def PSNR(img, noise_img):
 	mse = numpy.mean((img - noise_img) ** 2)
 	if mse == 0:
@@ -93,31 +38,19 @@ def PSNR(img, noise_img):
 	PIXEL_MAX = 255.0
 	return 20 * math.log10(PIXEL_MAX / math.sqrt(mse))
 
+def init_var(b=0, e=1, s=0.1):
+	l_var = list()
+	l_var =numpy.arange(start=b, stop=e, step=s)
+	return l_var
 
-#additive noise
-def add_noise(img, snr=20):
+#test one image  Lena
+def init_image():
+	lImages = list()
+	lImages.append(Image("images/lena256gray.png"))
 
-	noise = numpy.random.normal(0, numpy.sqrt(snr), img.shape)
-	noisy_arr = img + noise
+	return lImages
 
-	noisy = numpy.clip(noisy_arr,a_min=0,a_max=255)
-	return noisy
-
-#list of Image
-def denoise_images(lImages, lDenoiser):
-	lImgDen = list()
-	for img in lImages:
-		for den in lDenoiser:
-			den.get_name()
-			cv2.imwrite("denoised/WTF.jpg", img.im_n)
-			img_d = den.denoise(img)
-			cv2.imwrite("denoised/"+den.get_name() + ".jpg", img_d)
-
-			lImgDen.append(img_d)
-
-	return lImgDen
-
-#Init algorithms of denoise
+#Init all algorithms of denoise
 def init_denoiser():
 	lDenoiser = list()
 
@@ -125,45 +58,122 @@ def init_denoiser():
 	#lDenoiser.append(b)
 
 	tv = TVL1()
-	#lDenoiser.append(tv)
-
+	lDenoiser.append(tv)
+	params = {}
+	params["iter"] = 60
+	params["lyambda"] = 1.2
+	lDenoiser.append(TVL1(params=params))
 	nl = NL_mean()
 	#lDenoiser.append(nl)
 
 	mf = MF()
-	lDenoiser.append(mf)
+	#lDenoiser.append(mf)
 
 	g = Guided()
 	#lDenoiser.append(g)
-
 
 	bm3d = BM3D()
 	#lDenoiser.append(bm3d)
 
 	return lDenoiser
 
-#images - list of Images
-def add_noise_to_list(images, snr=20):
+def init_result(l_var, l_image, l_den):
+	"""
 
-	for image in images:
-		image.add_noise()
+	:param l_var: list of variance of gausiian noise
+	:param l_image: list of class Image
+	:param l_den: list of denoiser
+	:return: list of class Result
+	"""
+	l_res = list()
+	for den in l_den:
+		for img in l_image:
+			for var in l_var:
+				res = Result(img.get_path(), img.get_image(), den)
+				res.set_var(var)
+				l_res.append(res)
+
+	return l_res
+
+def add_noise(l_res):
+	for res in l_res:
+		noised_img = add_gauss_noise(res.get_original_image(), res.get_var())
+		res.set_noised_image(noised_img, res.get_var())
+
+def denoise(l_res):
+	for res in l_res:
+		noised_img = res.get_noised_image()
+		alg = res.get_alg()
+
+		denoised_img = alg.denoise(noised_img)
+		res.set_denoised_image(denoised_img)
+
+def plot_by_one_image(store, path, l_alg, l_var, save=True, show=False):
+	title = "PSNR_" + path.split("/")[1].split('-')[0]
+	print("TITLE: " + title)
+	plt.plot()
+
+	plt.title(title)
+	plt.xlabel("Variance of gaussian noise")
+	plt.ylabel("PSNR")
+	plt.grid(True)
+
+	for den in l_alg:
+		alg_store = Storage(store.get_results_by_alg(den))
+
+		print("This alg procees  image")
+		print(len(alg_store.l_res))
+		l_psnr = list()
+
+		for var in l_var:
+			l_res = alg_store.get_results_by_image_and_var(path, var)
+
+			if len(l_res) is not 1:
+				print("ERROR: some image with same path and same variance")
+
+
+			res = l_res[0]
+
+			l_psnr.append(res.get_psnr())
+
+		plt.plot(l_var, l_psnr, label=den.get_name())
+
+	plt.legend()
+
+	if show:
+		plt.show()
+
+	if save:
+		format = "png"
+		name_plot = title + "." + format
+		plt.savefig(title, fmt=format)
+
+
+
+def count_psnr(l_res):
+	for res  in l_res:
+		psnr = PSNR(res.get_original_image(), res.get_denoised_image())
+		res.set_psnr(psnr)
+
+# For each combination alg and image create CLASS result
+def test_all_algorythms():
+	l_var = init_var(b=0.1, e=0.3)
+	print("Var: " + str(l_var))
+	l_im = init_image()
+	l_den = init_denoiser()
+	l_res = init_result(l_var, l_im, l_den)
+
+	add_noise(l_res)
+	denoise(l_res)
+	count_psnr(l_res)
+
+	store = Storage(l_res)
+	plot_by_one_image(store, l_im[0].path, l_den, l_var=l_var)
+
+
 
 def main():
-	snr = 3				# SNR for additive noise
-	count_images = 1	#Number of images for denoising
-	list_of_denoiser = init_denoiser()
-
-	print("LOAD %s IMAGES" % count_images)
-	images = load_images("images", count_images)
-
-	print("ADD NOISE")
-	add_noise_to_list(images)
-
-	print("DENOSIE")
-	denoise_im = denoise_images(images, list_of_denoiser)
-
-
-
+	test_all_algorythms()
 
 if __name__ == "__main__":
 	sys.exit(main())
