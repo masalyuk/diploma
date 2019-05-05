@@ -1,6 +1,8 @@
 \documentclass[a4paper,14pt]{extarticle} % 14й шрифт
 \usepackage[left=30mm, top=20mm, right=10mm, bottom=20mm, nohead, nofoot]{geometry}
+
 \linespread{1.3}
+\usepackage{graphicx}
 \usepackage[utf8]{inputenc}
 \usepackage[english, russian]{babel}
 
@@ -10,9 +12,12 @@
 	\include{common}
 	\include{descriptionalgorithm}
 	\include{conclusion}
-	\include{literature}
+	\include{application}
 	
 	
 	\bibliographystyle{utf8gost705u}  %% стилевой файл для оформления по ГОСТу
 	\bibliography{biblio}     %% имя библиографической базы (bib-файла) 
+**\appendix
+\section{Name of Appendix A}
+\label{app:BillRes}
 \end{document}
