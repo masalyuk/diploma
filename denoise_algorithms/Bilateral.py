@@ -8,7 +8,7 @@ class Bilateral(ADenoiser):
 		if params is None:
 			self.params = {}
 			self.params["diameter"] = 21
-			self.params["sigma_i"] = 250
+			self.params["sigma_i"] = 3
 			self.params["sigma_s"] = 1
 
 		ADenoiser.__init__(self,"Bilateral", params)
@@ -46,6 +46,7 @@ class Bilateral(ADenoiser):
 						wp = gi * gs
 						filtered_image = (filtered_image) + (image[int(n_x)][int(n_y)] * wp)
 						wp_total = wp_total + wp
+
 				filtered_image = filtered_image // wp_total
 				new_image[row][col] = numpy.round(filtered_image).astype("uint8")
 

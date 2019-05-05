@@ -1,10 +1,12 @@
 import numpy
 import cv2
+import json
+import hashlib
 
 class Result:
 	"""
 
-	Class Result contais original image, path to original image,
+	Class Result contains original image, path to original image,
 	noised image, denoised image, var and noise reduction algorithm
 
 	"""
@@ -75,3 +77,27 @@ class Result:
 			print("Deoised image is null")
 		else:
 			self.denois_im = im.copy()
+
+	def anyFiledsIsNull(self):
+		pass
+
+	def create_name_for_denoised_image(self, _dict):
+		h_str = json.dumps(_dict)
+		h = hashlib.md5()
+		return h.hexdigest()
+
+
+	def getUpDict(self):
+		#return dict with next keys
+		# path to original image
+		# var
+		# psnr
+		# keys from alg
+
+		self.anyFiledsIsNull()
+		cur_dict = {"path":self.path, "var":self.var, "psnr":self.psnr,"params":self.alg.getUpDict()}
+
+		name = self.create_name_for_denoised_image(cur_dict)
+		cur_dict.update({"name_den": name})
+
+		return cur_dict

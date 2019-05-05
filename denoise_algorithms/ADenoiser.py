@@ -1,6 +1,8 @@
 import numpy
+import json
 """ TODO ADD EQUAL OPERATOR. IT COMPARE NAME OF ALG AND PARAM"""
 """ TODO ADD VALIDATE PARAM """
+#params - is dict of different parameters of some alg
 class ADenoiser:
 	def __init__(self, name, params=None):
 		self.name = name
@@ -8,6 +10,14 @@ class ADenoiser:
 			self.params = {}
 		else:
 			self.params = params
+
+	def getUpDict(self):
+		# return dict with name and params
+		# for further writing in JsonFile
+		new_dic = self.params.copy()
+
+		new_dic.update({'name' : self.name})
+		return new_dic.copy()
 
 	def set_parameters(self, params):
 		self.params = params
@@ -22,7 +32,7 @@ class ADenoiser:
 		pass
 
 	def __str__(self):
-		info = "Name of alg: " + name + "\n"
+		info = "Name of alg: " + self.name + "\n"
 
 		pairs = self.params.items()
 

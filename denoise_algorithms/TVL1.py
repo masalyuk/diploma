@@ -1,5 +1,6 @@
 import numpy
 import cv2
+
 from denoise_algorithms.ADenoiser import *
 
 class TVL1(ADenoiser):
@@ -7,9 +8,10 @@ class TVL1(ADenoiser):
 		if params is None:
 			self.params = {}
 			self.params["iter"] = 50
-			self.params["lyambda"] = 1
+			self.params["lyambda"] = round(1.5, 3)
 			ADenoiser.__init__(self, "TVL1", self.params)
 		else:
+			params["lyambda"] = round(params["lyambda"], 3)
 			ADenoiser.__init__(self, "TVL1", params)
 
 
@@ -67,8 +69,6 @@ class TVL1(ADenoiser):
 		theta = 1.0
 
 		X = image.copy()/255.0
-		print(X.shape)
-
 		P = self.nabla(X)
 		for i in range(iter_n):
 			P = self.project_nd(P + sigma * self.nabla(X), 1)
@@ -83,7 +83,7 @@ class TVL1(ADenoiser):
 
 
 	def denoise(self, dataImage):
-		print(self.params)
+
 		denoised_im = numpy.zeros_like(dataImage)
 		for ch in range(3):
 			denoised_im[:,:,ch] = self.tv_denoise(dataImage[:,:,ch], self.params["lyambda"], self.params["iter"])
