@@ -23,4 +23,33 @@
 \newblock М.: Техносфера, 2005.
 \newblock 1072~{с.}
 
+\bibitem{He}
+\selectlanguageifdefined{russian}
+K.~He, J.~Sun, X.~Tang.
+
+\bibitem{dabov}
+\selectlanguageifdefined{russian}
+K.~Dabov~A.~Foi~V.~Katkovnik, Egiazarian~K. Image denoising by sparse 3D
+  transform-domain collaborative filtering~// {IEEE Trans. Image Process.}
+\newblock 2007.
+\newblock Т.~16.
+\newblock {С.}~2080--2095.
+
+\bibitem{Hasan2018}
+\selectlanguageifdefined{russian}
+Hasan~Mahmud, El-Sakka~Mahmoud~R. Improved BM3D image denoising using
+  SSIM-optimized Wiener filter~// EURASIP Journal on Image and Video
+  Processing.
+\newblock 2018.  Apr.
+\newblock Т. 2018, {№}~1.
+\newblock {с.}~25. URL:  https://doi.org/10.1186/s13640-018-0264-z.
+
+\bibitem{bm3d}
+\selectlanguageifdefined{russian}
+Lebrun~Marc. {An Analysis and Implementation of the BM3D Image Denoising
+  Method}~// {Image Processing On Line}.
+\newblock 2012.
+\newblock Т.~2.
+\newblock {С.}~175--213.
+
 \end{thebibliography}
