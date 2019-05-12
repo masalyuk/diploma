@@ -17,18 +17,22 @@ class Bilateral(ADenoiser):
 		return ADenoiser.get_name(self)
 
 	def __gaussian(self, x, sigma):
-		return (1.0 / (2 * numpy.pi * (sigma ** 2))) * numpy.exp(-(x ** 2) / (2 * (sigma ** 2)))
+		#print("suka")
+		#print(2 * (sigma ** 2))
+		return numpy.exp(-(x**2)/(2*sigma**2))
+		#return (1.0 / (2 * numpy.pi * (sigma ** 2))) * numpy.exp(-(x ** 2) / (2 * (sigma ** 2)))
 
 	def __distance(self, x1, y1, x2, y2):
 		return numpy.sqrt(numpy.abs((x1 - x2) ** 2 - (y1 - y2) ** 2))
 
 	def denoise(self, dataImage):
 
-		denoise_image = self.__bilateral_filter(dataImage.astype("uint8").copy(), self.params["diameter"], self.params["sigma_i"], self.params["sigma_s"])
+		denoise_image = self.__bilateral_filter(dataImage.copy(), self.params["diameter"], self.params["sigma_i"], self.params["sigma_s"])
 		return denoise_image
 
 	def __bilateral_filter(self, image, diameter, sigma_i, sigma_s):
 		new_image = numpy.zeros(image.shape)
+
 		for row in range(len(image)):
 			for col in range(len(image[0])):
 				wp_total = 0
@@ -41,7 +45,9 @@ class Bilateral(ADenoiser):
 							n_x -= len(image)
 						if n_y >= len(image[0]):
 							n_y -= len(image[0])
+
 						gi = self.__gaussian(image[int(n_x)][int(n_y)] - image[row][col], sigma_i)
+
 						gs = self.__gaussian(self.__distance(n_x, n_y, row, col), sigma_s)
 						wp = gi * gs
 						filtered_image = (filtered_image) + (image[int(n_x)][int(n_y)] * wp)

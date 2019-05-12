@@ -85,8 +85,11 @@ class TVL1(ADenoiser):
 	def denoise(self, dataImage):
 
 		denoised_im = numpy.zeros_like(dataImage)
-		for ch in range(3):
-			denoised_im[:,:,ch] = self.tv_denoise(dataImage[:,:,ch], self.params["lyambda"], self.params["iter"])
+
+		for i in range(2):
+			denoised_im = dataImage - numpy.diff
+		#for ch in range(3):
+			#denoised_im[:,:,ch] = self.tv_denoise(dataImage[:,:,ch], self.params["lyambda"], self.params["iter"])
 
 		return denoised_im
 

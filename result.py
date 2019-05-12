@@ -2,6 +2,8 @@ import numpy
 import cv2
 import json
 import hashlib
+import os
+from os.path import join
 
 class Result:
 	"""
@@ -58,6 +60,9 @@ class Result:
 		else:
 			return self.orig_im
 
+	def get_name_original_image(self):
+		return self.path.split('\\')[1]
+
 	def get_path(self):
 		return self.path
 
@@ -83,9 +88,74 @@ class Result:
 
 	def create_name_for_denoised_image(self, _dict):
 		h_str = json.dumps(_dict)
+		print("JSON:" + h_str)
 		h = hashlib.md5()
+		h.update(h_str.encode())
+		print(h.hexdigest())
 		return h.hexdigest()
 
+	def save_result(self):
+
+		self.write_json()
+		self.write_denoised_images()
+
+	def write_denoised_images(self):
+		_path = self.get_path_for_res_optimal()
+
+		#write noised image
+		cv2.imwrite(_path + self.get_name_original_image(), self.get_noised_image())
+
+		_den_im_dir = join(_path, "den_im")
+
+		if os.path.exists(_den_im_dir) is False:
+			os.mkdir(_den_im_dir)
+
+		_dict = self.getUpDict()
+		name_img = _dict.get('name_den')
+		path_img = join(_den_im_dir, name_img)
+		cv2.imwrite(path_img + ".png", self.get_denoised_image())
+
+	def write_json(self):
+		_path = self.get_path_for_res_optimal()
+		# in _path contain folder json, folder with denoised_images,
+		# folder with plot and noised images
+		# images - because we have some img for test
+
+		_json_dir = join(_path, "json")
+		if os.path.exists(_json_dir) is False:
+			os.mkdir(_json_dir)
+
+		_dict = self.getUpDict()
+		name_json = _dict.get('name_den')
+		path_json = join(_json_dir, name_json) + ".json"
+
+		fp = open(path_json, 'w')
+
+		json.dump(_dict, fp)
+
+	def get_path_for_res_optimal(self):
+		# dict in res
+		_dict = self.getUpDict()
+		# folder with res of optimal param in dir optimal
+		optimal_dir = "optimal"
+		if os.path.exists(optimal_dir) is False:
+			os.mkdir(optimal_dir)
+		# in folder optimal exists folder with name alg
+		_params = _dict.get('params')
+		name_alg = _params.get('name')
+
+		alg_dir = join(optimal_dir, name_alg)
+		if os.path.exists(alg_dir) is False:
+			os.mkdir(alg_dir)
+
+		# in folder alg exits folder with diff variance
+		_var = str(_dict.get('var'))
+		var_dir = join(alg_dir, _var)
+
+		if os.path.exists(var_dir) is False:
+			os.mkdir(var_dir)
+
+		return var_dir
 
 	def getUpDict(self):
 		#return dict with next keys

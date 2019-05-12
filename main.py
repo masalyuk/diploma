@@ -52,13 +52,8 @@ def init_images():
 	for img in imgs:
 		lImages.append(Image(join("images", img)))
 		i = i + 1
+		break
 		print("This image is " + str(i))
-	return lImages
-#test one image  Lena
-def init_image():
-	lImages = list()
-	lImages.append(Image("images/lena256gray.png"))
-
 	return lImages
 
 #Init all algorithms of denoise
@@ -88,63 +83,6 @@ def init_denoiser():
 
 	return lDenoiser
 
-# for res optimal means
-# path for choise optimal params
-def get_path_for_res_optimal(res):
-	# dict in res
-	_dict = res.getUpDict()
-	#folder with res of optimal param in dir optimal
-	optimal_dir = "optimal"
-	if os.path.exists(optimal_dir) is False:
-		os.mkdir(optimal_dir)
-	#in folder optimal exists folder with name alg
-	_params = _dict.get('params')
-	name_alg = _params.get('name')
-
-	alg_dir = join(optimal_dir, name_alg)
-	if os.path.exists(alg_dir) is False:
-		os.mkdir(alg_dir)
-
-	#in folder alg exits folder with diff variance
-	_var = str(_dict.get('var'))
-	var_dir = join(alg_dir, _var)
-
-	if os.path.exists(var_dir) is False:
-		os.mkdir(var_dir)
-
-	return var_dir
-
-def write_denoised_images(res):
-	_path = get_path_for_res_optimal(res)
-
-	_den_im_dir = join(_path, "den_im")
-	if os.path.exists(_den_im_dir) is False:
-		os.mkdir(_den_im_dir)
-
-	_dict = res.getUpDict()
-	name_img = _dict.get('name_den')
-	path_img = join(_den_im_dir, name_img)
-	cv2.imwrite(path_img + ".png", res.get_denoised_image())
-
-def write_json(res):
-	_path = get_path_for_res_optimal(res)
-	# in _path contain folder json, folder with denoised_images,
-	# folder with plot and noised images
-	# images - because we have some img for test
-
-	_json_dir = join(_path, "json")
-	if os.path.exists(_json_dir) is False:
-		os.mkdir(_json_dir)
-
-	_dict = res.getUpDict()
-	name_json = _dict.get('name_den')
-	path_json = join(_json_dir, name_json) + ".json"
-
-	fp = open(path_json,'w')
-
-	json.dump(_dict, fp)
-
-
 
 def init_result(l_var, l_image, l_den):
 	"""
@@ -170,6 +108,7 @@ def add_noise(l_res):
 		noised_img = add_gauss_noise(res.get_original_image(), res.get_var())
 		res.set_noised_image(noised_img, res.get_var())
 
+
 def denoise(l_res):
 	print("DENOIZE:")
 	total_res = len(l_res)
@@ -180,11 +119,8 @@ def denoise(l_res):
 		alg = res.get_alg()
 		denoised_img = alg.denoise(noised_img)
 		res.set_denoised_image(denoised_img)
-
-		if i > one_percent:
-
-			one_percent = one_percent + one_percent*10
-			print("Denoised:" + str((one_percent/total_res)*100) + "% images")
+		print(i)
+		i = i + 1
 
 def plot_by_one_image(store, path, l_alg, l_var, save=True, show=False):
 	title = "PSNR_" + path.split("/")[1].split('-')[0]
@@ -211,8 +147,6 @@ def plot_by_one_image(store, path, l_alg, l_var, save=True, show=False):
 
 
 			res = l_res[0]
-			write_json(res)
-			write_denoised_images(res)
 			l_psnr.append(res.get_psnr())
 
 		plt.plot(l_var, l_psnr, label=den.get_name())
@@ -230,10 +164,10 @@ def plot_by_one_image(store, path, l_alg, l_var, save=True, show=False):
 
 
 def count_psnr(l_res):
-	for res  in l_res:
+	for res in l_res:
 		psnr = PSNR(res.get_original_image(), res.get_denoised_image())
 		res.set_psnr(psnr)
-		res.getUpDict()
+		res.save_result()
 
 
 def chois_optimal_param_billateral():
@@ -241,20 +175,33 @@ def chois_optimal_param_billateral():
 	print("Init vat")
 	l_var = init_var(b=0.05, e=0.1)
 	print("I have " + str(len(l_var)) + " var")
-	params = {}
+
 	########init##########
 	print("Init params")
 	i = 0
-	for ss in range(1,50, 30):
-		for si in range(1, 255, 200):
+	params = {}
+	si = 10
+	ss = 1
+	params["sigma_i"] = si
+	params["sigma_s"] = ss
+	params["diameter"] = 2 * (2 * ss + 1)
+	i = i + 1
+	print("This is " + str(i) + " alg")
 
-			params["sigma_i"] = 3
-			params["sigma_s"] = 1
-			params["diameter"] = 4 * ss
+	l_den.append(Bilateral(params.copy()))
+	'''
+	for ss in range(1,5, 1):
+		for si in range(1, 10, 3):
+			params = {}
+
+			params["sigma_i"] = si
+			params["sigma_s"] = ss
+			params["diameter"] = 2 * (2*ss+1)
 			i = i + 1
 			print("This is " + str(i) + " alg")
-			b = Bilateral(params.copy())
-			l_den.append(b)
+
+			l_den.append(Bilateral(params.copy()))
+			'''
 	###############################
 	print("Init image")
 	l_im = init_images()
@@ -264,10 +211,6 @@ def chois_optimal_param_billateral():
 	add_noise(l_res)
 	denoise(l_res)
 	count_psnr(l_res)
-
-	for res in l_res:
-		write_json(res)
-		write_denoised_images(res)
 
 	for im in l_im:
 		params = get_opt(im, l_var[0])
@@ -283,7 +226,6 @@ def get_opt(im, var):
 	bill_dir = "Bilateral"
 	var_dir = str(var)
 	json_dir = "json"
-
 	full_path = join(join(join(optimal,bill_dir), var_dir), json_dir)
 	jsons = os.listdir(full_path)
 
