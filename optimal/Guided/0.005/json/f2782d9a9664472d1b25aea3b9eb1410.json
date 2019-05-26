@@ -1,0 +1,1 @@
+{"path": "test_im\\lena.png", "var": 0.005, "params": {"radius": 3, "eps": 1e-06, "name": "Guided"}, "name_den": "f2782d9a9664472d1b25aea3b9eb1410", "psnr": 23.204169485639568, "ssim": 0.6665559483047304}

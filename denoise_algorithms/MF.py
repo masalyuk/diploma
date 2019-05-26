@@ -7,12 +7,14 @@ class MF(ADenoiser):
 	def __init__(self, params=None):
 		if params is None:
 			self.params = {}
-			self.params["covar"] = 1
+			self.params["covar"] = 21
 			self.params["max_diff"] = 1
 			self.params["weight_diff"] = 1
-			self.params["iterations"] = 2
+			self.params["iterations"] = 1
+		else:
+			self.params = params
 
-		ADenoiser.__init__(self, "MF", params)
+		ADenoiser.__init__(self, "MF", self.params)
 
 	def dif_color(self, val1, val2, type="GRAY"):
 		if type == "RGB":
@@ -84,9 +86,9 @@ class MF(ADenoiser):
 		(noisy_image, hidden_image) = self.swap_image(noisy_image, hidden_image)
 		# This value is guaranteed to be larger than the
 		# potential of any configuration of pixel values.
-		V_max = (weight * height) * ((256) **  2 / (2 * self.covar) + 4 * self.weight_diff * self.max_diff)
+		V_max = (weight * height) * ((256) **  2 / (2 * self.params["covar"]) + 4 * self.params["weight_diff"] * self.params["max_diff"])
 		colors = self.generate_all_color_values(255, 1)
-		for i in range(self.iterations):
+		for i in range(self.params["iterations"]):
 			(noisy_image, hidden_image) = self.swap_image(noisy_image, hidden_image)
 			# Vary each pixel individually to find the
 			# values that minimise the local potentials.
@@ -96,13 +98,12 @@ class MF(ADenoiser):
 					min_val = -1
 					for val in colors:
 						# The component of the potential due to the known data.
-						V_data = self.dif_color(val, image[r, c]) ** 2 / (2 * self.covar)
-						V_diff = self.neighbors_func(val, r, c, noisy_image, self.max_diff)
-						V_current = V_data + self.weight_diff * V_diff
+						V_data = self.dif_color(val, image[r, c]) ** 2 / (2 * self.params["covar"])
+						V_diff = self.neighbors_func(val, r, c, noisy_image, self.params["max_diff"])
+						V_current = V_data + self.params["weight_diff"] * V_diff
 
 						if V_current < V_local:
 							min_val = val
-							print("test")
 							V_local = V_current
 
 					hidden_image[r, c] = min_val

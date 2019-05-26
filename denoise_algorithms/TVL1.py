@@ -9,10 +9,11 @@ class TVL1(ADenoiser):
 			self.params = {}
 			self.params["iter"] = 50
 			self.params["lyambda"] = round(1.5, 3)
-			ADenoiser.__init__(self, "TVL1", self.params)
+
 		else:
-			params["lyambda"] = round(params["lyambda"], 3)
-			ADenoiser.__init__(self, "TVL1", params)
+			self.params = params
+
+		ADenoiser.__init__(self, "TVL1", self.params)
 
 
 
@@ -86,10 +87,9 @@ class TVL1(ADenoiser):
 
 		denoised_im = numpy.zeros_like(dataImage)
 
-		for i in range(2):
-			denoised_im = dataImage - numpy.diff
-		#for ch in range(3):
-			#denoised_im[:,:,ch] = self.tv_denoise(dataImage[:,:,ch], self.params["lyambda"], self.params["iter"])
 
-		return denoised_im
+		for ch in range(3):
+			denoised_im[:,:,ch] = self.tv_denoise(dataImage[:,:,ch], self.params["lyambda"], self.params["iter"])
+
+		return denoised_im.astype("uint8")
 

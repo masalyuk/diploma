@@ -1,0 +1,25 @@
+\babel@toc {russian}{}
+\contentsline {section}{\numberline {1}\IeC {\CYRO }\IeC {\cyrb }\IeC {\cyrz }\IeC {\cyro }\IeC {\cyrr }}{3}% 
+\contentsline {subsection}{\numberline {1.1}\IeC {\CYRP }\IeC {\cyrr }\IeC {\cyro }\IeC {\cyrs }\IeC {\cyrt }\IeC {\cyre }\IeC {\cyrishrt }\IeC {\cyrsh }\IeC {\cyri }\IeC {\cyre } \IeC {\cyra }\IeC {\cyrl }\IeC {\cyrg }\IeC {\cyro }\IeC {\cyrr }\IeC {\cyri }\IeC {\cyrt }\IeC {\cyrm }\IeC {\cyrery }}{4}% 
+\contentsline {subsection}{\numberline {1.2}\IeC {\CYRK }\IeC {\cyrl }\IeC {\cyra }\IeC {\cyrs }\IeC {\cyrs }\IeC {\cyri }\IeC {\cyrf }\IeC {\cyri }\IeC {\cyrk }\IeC {\cyra }\IeC {\cyrc }\IeC {\cyri }\IeC {\cyrya } \IeC {\cyrf }\IeC {\cyri }\IeC {\cyrl }\IeC {\cyrsftsn }\IeC {\cyrt }\IeC {\cyrr }\IeC {\cyro }\IeC {\cyrv }}{4}% 
+\contentsline {section}{\numberline {2}\IeC {\CYRO }\IeC {\cyrp }\IeC {\cyri }\IeC {\cyrs }\IeC {\cyra }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyre } \IeC {\cyra }\IeC {\cyrl }\IeC {\cyrg }\IeC {\cyro }\IeC {\cyrr }\IeC {\cyri }\IeC {\cyrt }\IeC {\cyrm }\IeC {\cyro }\IeC {\cyrv }}{5}% 
+\contentsline {subsection}{\numberline {2.1}Bilateral}{5}% 
+\contentsline {subsection}{\numberline {2.2}Guided filter}{6}% 
+\contentsline {subsection}{\numberline {2.3}Non-Local mean}{7}% 
+\contentsline {subsection}{\numberline {2.4}BM3D}{8}% 
+\contentsline {subsubsection}{\numberline {2.4.1}\IeC {\CYRP }\IeC {\cyre }\IeC {\cyrr }\IeC {\cyrv }\IeC {\cyrery }\IeC {\cyrishrt } \IeC {\cyrsh }\IeC {\cyra }\IeC {\cyrg }}{8}% 
+\contentsline {paragraph}{\IeC {\CYRG }\IeC {\cyrr }\IeC {\cyru }\IeC {\cyrp }\IeC {\cyrp }\IeC {\cyri }\IeC {\cyrr }\IeC {\cyro }\IeC {\cyrv }\IeC {\cyrk }\IeC {\cyra }}{8}% 
+\contentsline {paragraph}{\IeC {\CYRS }\IeC {\cyro }\IeC {\cyrv }\IeC {\cyrm }\IeC {\cyre }\IeC {\cyrs }\IeC {\cyrt }\IeC {\cyrn }\IeC {\cyra }\IeC {\cyrya } \IeC {\cyrf }\IeC {\cyri }\IeC {\cyrl }\IeC {\cyrsftsn }\IeC {\cyrt }\IeC {\cyrr }\IeC {\cyra }\IeC {\cyrc }\IeC {\cyri }\IeC {\cyrya }}{9}% 
+\contentsline {paragraph}{\IeC {\CYRA }\IeC {\cyrg }\IeC {\cyrr }\IeC {\cyre }\IeC {\cyrg }\IeC {\cyra }\IeC {\cyrc }\IeC {\cyri }\IeC {\cyrya }}{9}% 
+\contentsline {subsubsection}{\numberline {2.4.2}\IeC {\CYRV }\IeC {\cyrt }\IeC {\cyro }\IeC {\cyrr }\IeC {\cyro }\IeC {\cyrishrt } \IeC {\cyrsh }\IeC {\cyra }\IeC {\cyrg }}{10}% 
+\contentsline {paragraph}{\IeC {\CYRG }\IeC {\cyrr }\IeC {\cyru }\IeC {\cyrp }\IeC {\cyrp }\IeC {\cyri }\IeC {\cyrr }\IeC {\cyro }\IeC {\cyrv }\IeC {\cyrk }\IeC {\cyra }}{10}% 
+\contentsline {paragraph}{\IeC {\CYRS }\IeC {\cyro }\IeC {\cyrv }\IeC {\cyrm }\IeC {\cyre }\IeC {\cyrs }\IeC {\cyrt }\IeC {\cyrn }\IeC {\cyra }\IeC {\cyrya } \IeC {\cyrf }\IeC {\cyri }\IeC {\cyrl }\IeC {\cyrsftsn }\IeC {\cyrt }\IeC {\cyrr }\IeC {\cyra }\IeC {\cyrc }\IeC {\cyri }\IeC {\cyrya }}{10}% 
+\contentsline {paragraph}{\IeC {\CYRA }\IeC {\cyrg }\IeC {\cyrr }\IeC {\cyre }\IeC {\cyrg }\IeC {\cyra }\IeC {\cyrc }\IeC {\cyri }\IeC {\cyrya }}{11}% 
+\contentsline {subsubsection}{\numberline {2.4.3}\IeC {\CYRO }\IeC {\cyrp }\IeC {\cyrt }\IeC {\cyri }\IeC {\cyrm }\IeC {\cyra }\IeC {\cyrl }\IeC {\cyrsftsn }\IeC {\cyrn }\IeC {\cyrery }\IeC {\cyre } \IeC {\cyrp }\IeC {\cyra }\IeC {\cyrr }\IeC {\cyra }\IeC {\cyrm }\IeC {\cyre }\IeC {\cyrt }\IeC {\cyrr }\IeC {\cyrery }}{11}% 
+\contentsline {subsection}{\numberline {2.5}Random Markov field}{11}% 
+\contentsline {section}{\numberline {3}\IeC {\CYRI }\IeC {\cyrs }\IeC {\cyrs }\IeC {\cyrl }\IeC {\cyre }\IeC {\cyrd }\IeC {\cyro }\IeC {\cyrv }\IeC {\cyra }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyrya }}{14}% 
+\contentsline {subsection}{\numberline {3.1}\IeC {\CYRI }\IeC {\cyrz }\IeC {\cyro }\IeC {\cyrb }\IeC {\cyrr }\IeC {\cyra }\IeC {\cyrzh }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyrya } \IeC {\cyrd }\IeC {\cyrl }\IeC {\cyrya } \IeC {\cyri }\IeC {\cyrs }\IeC {\cyrs }\IeC {\cyrl }\IeC {\cyre }\IeC {\cyrd }\IeC {\cyro }\IeC {\cyrv }\IeC {\cyra }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyrya }}{14}% 
+\contentsline {subsection}{\numberline {3.2}\IeC {\CYRO }\IeC {\cyrc }\IeC {\cyre }\IeC {\cyrn }\IeC {\cyrk }\IeC {\cyra } \IeC {\cyra }\IeC {\cyrl }\IeC {\cyrg }\IeC {\cyro }\IeC {\cyrr }\IeC {\cyri }\IeC {\cyrt }\IeC {\cyrm }\IeC {\cyro }\IeC {\cyrv }}{14}% 
+\contentsline {subsection}{\numberline {3.3}\IeC {\CYRR }\IeC {\cyre }\IeC {\cyrz }\IeC {\cyru }\IeC {\cyrl }\IeC {\cyrsftsn }\IeC {\cyrt }\IeC {\cyra }\IeC {\cyrt }\IeC {\cyrery } \IeC {\cyri }\IeC {\cyrs }\IeC {\cyrs }\IeC {\cyrl }\IeC {\cyre }\IeC {\cyrd }\IeC {\cyro }\IeC {\cyrv }\IeC {\cyra }\IeC {\cyrn }\IeC {\cyri }\IeC {\cyrya }}{15}% 
+\contentsline {section}{\numberline {A}Billateral }{16}% 
+\contentsline {thebibliography}{\IeC {\cyrd }}{17}% 

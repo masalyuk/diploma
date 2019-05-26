@@ -4,7 +4,7 @@ from denoise_algorithms.ADenoiser import *
 # this code from https://github.com/wuqiyao20160118/
 # Parameters initialization
 class BM3D(ADenoiser):
-	def __init__(self,params=None):
+	def __init__(self, params=None):
 		if params is None:
 			self.params = {}
 			self.sigma = 25
@@ -23,8 +23,10 @@ class BM3D(ADenoiser):
 			self.params["Step2_Blk_Step"] = 3
 			self.params["Step2_Search_Step"] = 3
 			self.params["Step2_Search_Window"] = 39
+		else:
+			self.params = params
 
-		ADenoiser.__init__(self,"BM3D", params)
+		ADenoiser.__init__(self,"BM3D", self.params)
 
 	def get_name(self):
 		return ADenoiser.get_name(self)
@@ -258,8 +260,8 @@ class BM3D(ADenoiser):
 
 	def __BM3D_step_2(self, basic_img, img):
 		width, height = img.shape
-		block_size = self.Step2_Blk_Size
-		blk_step = self.Step2_Blk_Step
+		block_size = self.params["Step2_Blk_Size"]
+		blk_step = self.params["Step2_Blk_Size"]
 		width_num = int((width - block_size) / blk_step)
 		height_num = int((height - block_size) / blk_step)
 		filtered_img = numpy.zeros(img.shape, dtype=float)

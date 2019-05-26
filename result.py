@@ -17,6 +17,7 @@ class Result:
 		self.orig_im = cv2.imwrite(self.path)
 
 	def __init__(self, path, image, algorithm):
+
 		self.path = path
 
 		if image is None:
@@ -29,12 +30,19 @@ class Result:
 		self.alg = algorithm
 		self.var = None
 		self.psnr = -1
+		self.ssim = -1
 
 	def set_psnr(self, psnr):
 		self.psnr = psnr
 
+	def set_ssim(self, ssim):
+		self.ssim = ssim
+
 	def get_psnr(self):
 		return self.psnr
+
+	def get_ssim(self):
+		return self.ssim
 
 	def get_alg(self):
 		return self.alg
@@ -70,7 +78,7 @@ class Result:
 		self.var = var
 
 		if image is None:
-			print("Seted image is null")
+			print("Setted image is null")
 		else:
 			self.nois_im = image.copy()
 
@@ -165,9 +173,11 @@ class Result:
 		# keys from alg
 
 		self.anyFiledsIsNull()
-		cur_dict = {"path":self.path, "var":self.var, "psnr":self.psnr,"params":self.alg.getUpDict()}
 
+		cur_dict = {"path": self.path, "var": self.var, "params": self.alg.getUpDict()}
 		name = self.create_name_for_denoised_image(cur_dict)
 		cur_dict.update({"name_den": name})
+		cur_dict.update({"psnr": self.psnr})
+		cur_dict.update({"ssim": self.ssim})
 
 		return cur_dict

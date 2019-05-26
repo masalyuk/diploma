@@ -7,16 +7,22 @@ class NL_mean(ADenoiser):
 		if params is None:
 			self.params = {}
 			self.params["template_size"] = 7
-			self.params["search_size"] = 7
+			self.params["search_size"] = 16
+			self.params["similar"] = 20
+		else:
+			self.params = params
 
-		ADenoiser.__init__(self,"NL_mean", params)
+		ADenoiser.__init__(self,"NL_mean", self.params)
 
 	def get_name(self):
 		return ADenoiser.get_name(self)
 
 	def denoise(self, dataImage):
 		denoised_im = numpy.zeros_like(dataImage)
-		cv2.fastNlMeansDenoisingColored(dataImage.astype("uint8").copy(), dst=denoised_im,h=16,templateWindowSize=4,hColor=10)
+		denoised_im = cv2.fastNlMeansDenoisingColored(dataImage.astype("uint8").copy(),\
+													  templateWindowSize=self.params["template_size"], \
+													  searchWindowSize=self.params["search_size"],\
+													  h=self.params["similar"])
 
 
 		return denoised_im

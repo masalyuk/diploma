@@ -8,20 +8,24 @@ class Guided(ADenoiser):
     def __init__(self, params=None):
         if params is None:
             self.params = {}
-            self.params["radius"] = 5
-            self.params["eps"] = 1
+            self.params["radius"] = 3
+            self.params["eps"] = 1e-6
+        else:
+            self.params = params
 
-        ADenoiser.__init__(self, "Guided", params)
-
-
-def get_name(self):
-    return ADenoiser.get_name(self)
+        ADenoiser.__init__(self, "Guided", self.params)
 
 
-# image - class image
-def denoise(self, dataImage):
-    image = dataImage.copy()
-    denoised_im = numpy.zeros_like(image)
-    guidedFilter(image, denoised_im, self.radius, self.eps, dst=denoised_im)
-    return denoised_im
+    def get_name(self):
+        return ADenoiser.get_name(self)
+
+
+    # image - class image
+    def denoise(self, dataImage):
+
+        image = dataImage.copy().astype("uint8")
+        denoised_im = numpy.zeros_like(image)
+        denoised_im = guidedFilter(image, image, self.params["radius"], self.params["eps"], dst=denoised_im)
+
+        return denoised_im
 

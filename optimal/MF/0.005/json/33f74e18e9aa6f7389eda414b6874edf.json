@@ -1,0 +1,1 @@
+{"path": "test_im\\lena.png", "var": 0.005, "params": {"covar": 21, "max_diff": 10, "weight_diff": 1, "iterations": 1, "name": "MF"}, "name_den": "33f74e18e9aa6f7389eda414b6874edf", "psnr": 23.41065616531086, "ssim": 0.6748209215146596}
