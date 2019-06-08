@@ -96,10 +96,10 @@ class Result:
 
 	def create_name_for_denoised_image(self, _dict):
 		h_str = json.dumps(_dict)
-		print("JSON:" + h_str)
+
 		h = hashlib.md5()
 		h.update(h_str.encode())
-		print(h.hexdigest())
+
 		return h.hexdigest()
 
 	def save_result(self):

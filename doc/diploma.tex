@@ -3,20 +3,33 @@
 
 %\usepackage[left=30mm, top=20mm, right=15mm, bottom=20mm, nohead, nofoot]{geometry}
 \usepackage{amsmath}
-
+\usepackage{geometry} 
 \usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfigure}
+\graphicspath{{img/}}  % папки с картинками
 \usepackage{indentfirst}
 \usepackage[utf8]{inputenc}
 \usepackage[english, russian]{babel}
 \usepackage{cancel}
-\sloppy
+
+
+\linespread{1.5}
+\setcounter{tocdepth}{4} 
+\setcounter{secnumdepth}{4}
 \setmarginsrb{2cm}{1.5cm}{1cm}{1.5cm}{0pt}{0mm}{0pt}{13mm}
+
+
+\makeatletter
+\newenvironment{fleqns}[1][0pt]{\@mathmargin=#1\@fleqntrue}{\@fleqnfalse}
+\makeatother 
 \begin{document}
 	\include{title}
 	\tableofcontents
 	\include{introduction}
 	\include{common}
 	\include{descriptionalgorithm}
+	\include{measure}
 	\include{research}
 	\include{conclusion}
 	\include{application}

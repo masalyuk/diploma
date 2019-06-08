@@ -10,6 +10,8 @@ import json
 import os
 import numpy
 import cv2
+import shutil
+
 class Common:
 	'''
 	This class contain common function
@@ -48,9 +50,12 @@ class Common:
 		:param lRes: list of result
 		:return:
 		'''
+		i = 1
 		for res in self.lRes:
+			print("Add noise to: " + str(i))
 			noised_img = self.add_noise(res.get_original_image(), res.get_var())
 			res.set_noised_image(noised_img, res.get_var())
+			i = i + 1
 
 		return self.lRes
 
@@ -62,6 +67,44 @@ class Common:
 		:return:
 		'''
 		return random_noise(img.copy() / 255, mode='gaussian', var=variance, clip=True) * 255
+
+	def save_res_optimal_alg(self, image, var, alg, measure, path_json):
+		im = image  # path
+		var = var
+		alg = alg
+		# folder with res of optimal param in dir optimal
+		result_dir = "result"
+		if os.path.exists(result_dir) is False:
+			os.mkdir(result_dir)
+		#####################################################
+		result_dir = join(result_dir, image.split("\\")[-1])
+		if os.path.exists(result_dir) is False:
+			os.mkdir(result_dir)
+		# in folder alg exits folder with diff variance
+		var_dir = join(result_dir, var)
+
+		if os.path.exists(var_dir) is False:
+			os.mkdir(var_dir)
+
+		# in folder optimal exists folder with name alg
+		alg_dir = join(var_dir, alg)
+		if os.path.exists(alg_dir) is False:
+			os.mkdir(alg_dir)
+
+		# measure
+		measure_dir = join(alg_dir, measure)
+
+		if os.path.exists(measure_dir) is False:
+			os.mkdir(measure_dir)
+
+		src = path_json
+
+		dst = join(measure_dir, path_json.split("\\")[-1])
+		shutil.copyfile(src, dst, follow_symlinks=True)
+
+		src = src.replace("\\json", "\\den_im").replace("json", "png")
+		dst = join(measure_dir, src.split("\\")[-1])
+		shutil.copyfile(src, dst, follow_symlinks=True)
 
 	def get_optimal_param(self, alg, variance, measure, path_im):
 		'''
@@ -81,18 +124,26 @@ class Common:
 			name_alg = alg.get_name()
 
 		path = join(join(join(self.dir_res, name_alg), str(variance)), "json")
-		lJson = self.read_json(path)
+		#lJson =
+		(lJson, fJsons) = self.read_json(path)
 
 		best_measure = -10
 		best_params = {}
+		best_im = ""
 		for dJson in lJson:
 			if dJson["path"].split("\\")[-1] == path_im.split("\\")[-1]:
 				val = dJson[measure]
 				if val > best_measure:
 					best_measure = val
 					best_params = dJson["params"]
+					best_im = dJson["name_den"]
+					best_path = dJson
 
-		return best_params
+		if best_im != "":
+			best_im = best_im + ".json"
+			self.save_res_optimal_alg(path_im, variance, name_alg, measure, join(path, best_im))
+
+		return (best_params, best_im)
 
 	def get_images(self, dir):
 		'''
@@ -104,7 +155,7 @@ class Common:
 		fImages = os.listdir(dir)
 
 		for fImage in fImages:
-			lImages.append(Image(join(dir,fImage)))
+			lImages.append(Image(join(dir, fImage)))
 
 		return lImages
 
@@ -143,7 +194,8 @@ class Common:
 					l_res.append(res)
 
 		self.lRes = l_res.copy()
-		return l_res.copy()
+		print("All res:" + str(len(l_res)))
+		return self.lRes
 
 	def read_json(self, dir):
 		'''
@@ -159,4 +211,4 @@ class Common:
 				json_str = fj.read()
 				lJson.append(json.loads(json_str))
 
-		return lJson
+		return (lJson, fJsons)

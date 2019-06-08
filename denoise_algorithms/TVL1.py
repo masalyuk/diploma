@@ -7,20 +7,21 @@ class TVL1(ADenoiser):
 	def __init__(self,params=None):
 		if params is None:
 			self.params = {}
-			self.params["iter"] = 50
-			self.params["lyambda"] = round(1.5, 3)
+			self.params["iter"] = 20
+			self.params["lyambda"] = round(0.3, 3)
 
 		else:
 			self.params = params
 
+		self.params["iter"] = int(self.params["iter"])
 		ADenoiser.__init__(self, "TVL1", self.params)
 
 
 
 	def __str__(self):
-		info 			= "name: "		+ str(self.name)
-		iter_str		= "iter: "		+ str(self.iter)
-		lymbda_str		= "lymbda: "	+ str(self.lyambda)
+		info 			= "name: "		+ str(self.get_name())
+		iter_str		= "iter: "		+ str(self.params["iter"])
+		lymbda_str		= "lymbda: "	+ str(self.params["lyambda"])
 
 		return info + "\n" + iter_str + "\n" + lymbda_str
 
@@ -79,8 +80,6 @@ class TVL1(ADenoiser):
 		return X*255
 
 	#image - class image
-	def disp_parameters(self):
-		return "iter" + str(self.iter) + "_lyamd" + str(self.lyambda)
 
 
 	def denoise(self, dataImage):

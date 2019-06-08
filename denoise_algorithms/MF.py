@@ -7,22 +7,16 @@ class MF(ADenoiser):
 	def __init__(self, params=None):
 		if params is None:
 			self.params = {}
-			self.params["covar"] = 21
-			self.params["max_diff"] = 1
-			self.params["weight_diff"] = 1
-			self.params["iterations"] = 1
+			self.params["covar"] = 2
+			self.params["max_diff"] = 200
+			self.params["weight_diff"] =  1
+			self.params["iterations"] = 3
 		else:
 			self.params = params
 
 		ADenoiser.__init__(self, "MF", self.params)
 
-	def dif_color(self, val1, val2, type="GRAY"):
-		if type == "RGB":
-			# r = 0
-			# g = 1
-			# b = 2
-			return cv2.cvtColor(val1, cv2.COLOR_RGB2GRAY) - cv2.cvtColor(val2, cv2.COLOR_RGB2GRAY)
-		# return (val1[0]-val2[0])*0.2126+(val1[1]-val2[1])*0.7152+(val1[2]-val2[3])*0.0722
+	def dif_color(self, val1, val2):
 		return val1 - val2
 
 	def swap_image(self, src, dst):
@@ -50,22 +44,9 @@ class MF(ADenoiser):
 		for shift_y in vector_y:
 			if self.check_bound(img.shape[0], img.shape[1], x, y + shift_y):
 				diff = diff + min(self.dif_color(val[0], img[x, y + shift_y]) ** 2, max_diff)
-		'''
-		# The component of the potential due to the
-		# difference between neighbouring pixel values.
-		V_diff = 0
-		if r > 0:
-			V_diff = V_diff + min(dif_color(val, noisy_image(c, s)) ** 2, max_diff)
-	
-		if r < weight:
-			V_diff = V_diff + min((val - buffer(r + 1, c, s)) ** 2, max_diff)
-	
-		if c > 1:
-			V_diff = V_diff + min((val - buffer(r, c - 1, s)) ** 2, max_diff)
-	
-		if c < height:
-			V_diff = V_diff + min((val - buffer(r, c + 1, s)) ** 2, max_diff)
-		'''
+
+		if diff < 200:
+			print(diff)
 		return diff
 
 	# hidden count of values in one component

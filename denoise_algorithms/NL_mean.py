@@ -12,6 +12,10 @@ class NL_mean(ADenoiser):
 		else:
 			self.params = params
 
+		self.params["template_size"] = int(self.params["template_size"])
+		self.params["search_size"] = int(self.params["search_size"])
+		self.params["similar"] = int(self.params["similar"])
+
 		ADenoiser.__init__(self,"NL_mean", self.params)
 
 	def get_name(self):

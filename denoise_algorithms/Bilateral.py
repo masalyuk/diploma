@@ -14,6 +14,9 @@ class Bilateral(ADenoiser):
 		else:
 			self.params = params
 
+		self.params["diameter"] = int(self.params["diameter"])
+		self.params["sigma_i"] = int(self.params["sigma_i"])
+		self.params["sigma_s"] = int(self.params["sigma_s"])
 		ADenoiser.__init__(self,"Bilateral", self.params)
 
 	def get_name(self):
@@ -32,9 +35,12 @@ class Bilateral(ADenoiser):
 
 	def __bilateral_filter(self, image, diameter, sigma_i, sigma_s):
 		new_image = numpy.zeros(image.shape)
-
-		for row in range(len(image[1])):
-			for col in range(len(image[0])):
+		rows = image.shape[0]
+		cols = image.shape[1]
+		print(cols)
+		print(rows)
+		for row in range(rows):
+			for col in range(cols):
 				wp_total = 0
 				filtered_image = 0
 				for k in range(diameter):
@@ -48,10 +54,11 @@ class Bilateral(ADenoiser):
 						if n_y < 0:
 							n_y = 0
 
-						if n_x >= len(image[1]):
-							n_x = len(image[1]) - 1
-						if n_y >= len(image[0]):
-							n_y = len(image[0]) - 1
+						if n_x >= rows:
+							n_x = rows - 1
+						if n_y >= cols:
+							n_y = cols - 1
+
 
 
 						gi = self.__gaussian(image[int(n_x)][int(n_y)] - image[row][col], sigma_i)

@@ -3,12 +3,29 @@ import cv2
 from denoise_algorithms.ADenoiser import *
 # this code from https://github.com/wuqiyao20160118/
 # Parameters initialization
+params1 = {}
+params1["Threshold_Hard3D"] = 2.7 * 40
+params1["First_Match_threshold"] = 5000
+params1["Step1_max_matched_cnt"] = 16
+params1["Step1_Blk_Size"] = 8
+params1["Step1_Blk_Step"] = 3
+params1["Step1_Search_Step"] = 3
+params1["Step1_Search_Window"] = 39
+
+params1["Second_Match_threshold"] = 5000
+params1["Step2_max_matched_cnt"] = 32
+params1["Step2_Blk_Size"] = 8
+params1["Step2_Blk_Step"] = 3
+params1["Step2_Search_Step"] = 3
+params1["Step2_Search_Window"] = 39
 class BM3D(ADenoiser):
 	def __init__(self, params=None):
+		#params = params1.copy()
 		if params is None:
 			self.params = {}
-			self.sigma = 25
+			self.sigma = 40
 
+			self.params["sigma"] = int(40)
 			self.params["Threshold_Hard3D"] = 2.7 * self.sigma
 			self.params["First_Match_threshold"] = 2500
 			self.params["Step1_max_matched_cnt"] = 16
@@ -25,6 +42,21 @@ class BM3D(ADenoiser):
 			self.params["Step2_Search_Window"] = 39
 		else:
 			self.params = params
+			self.params["sigma"] = int(40)
+			self.params["First_Match_threshold"] = int(self.params["First_Match_threshold"])
+			self.params["Step1_max_matched_cnt"] = int(self.params["Step1_max_matched_cnt"])
+			self.params["Step1_Blk_Size"] = int(self.params["Step1_Blk_Size"] )
+			self.params["Step1_Blk_Step"] = int(self.params["Step1_Blk_Step"])
+			self.params["Step1_Search_Step"] = int(self.params["Step1_Search_Step"])
+			self.params["Step1_Search_Window"] = int(self.params["Step1_Search_Window"] )
+
+			self.params["Second_Match_threshold"] = int(self.params["Second_Match_threshold"])
+			self.params["Step2_max_matched_cnt"] = int(self.params["Step2_max_matched_cnt"])
+			self.params["Step2_Blk_Size"] = int(self.params["Step2_Blk_Size"] )
+			self.params["Step2_Blk_Step"] = int(self.params["Step2_Blk_Step"] )
+			self.params["Step2_Search_Step"] = int(self.params["Step2_Search_Step"])
+			self.params["Step2_Search_Window"] = int(self.params["Step2_Search_Window"])
+
 
 		ADenoiser.__init__(self,"BM3D", self.params)
 
@@ -237,7 +269,7 @@ class BM3D(ADenoiser):
 				temp_vector = similar_basic_blocks[:, i, j]
 				dct_temp = cv2.dct(temp_vector)
 				norm2 = numpy.matmul(dct_temp.T, dct_temp)
-				filter_weight = norm2 / (norm2 + self.sigma ** 2)
+				filter_weight = norm2 / (norm2 + self.params["sigma"] ** 2)
 				if filter_weight != 0:
 					Wiener_weight[i, j] = 1 / (filter_weight ** 2)
 				# Wiener_weight[i, j] = 1 / (filter_weight**2 * self.sigma**2)

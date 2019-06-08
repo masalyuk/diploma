@@ -3,6 +3,8 @@ A level-1 auxiliary file: title.aux
 A level-1 auxiliary file: introduction.aux
 A level-1 auxiliary file: common.aux
 A level-1 auxiliary file: descriptionalgorithm.aux
+A level-1 auxiliary file: measure.aux
+A level-1 auxiliary file: research.aux
 A level-1 auxiliary file: conclusion.aux
 A level-1 auxiliary file: application.aux
 The style file: utf8gost705u.bst
@@ -14,7 +16,14 @@ I was expecting a `,' or a `}'---line 12 of file biblio.bib
 I'm skipping whatever remains of this entry
 Warning--entry type for "web:Kalinkina" isn't style-file defined
 --line 17 of file biblio.bib
+I was expecting a `,' or a `)'---line 28 of file biblio.bib
+ : 
+ : title = "SURVEY ON VARIOUS NOISES AND TECHNIQUES FOR DENOISING THE COLOR IMAGE",
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Warning--empty title in Noise
+Warning--empty journal in Noise
 Warning--empty title in He
 Name 1 in "K. Dabov, A. Foi, V. Katkovnik, and K. Egiazarian" has a comma at the end for entry dabov
 while executing---line 1510 of file utf8gost705u.bst
-(There were 2 error messages)
+(There were 3 error messages)

@@ -11,6 +11,18 @@ class ADenoiser:
 		else:
 			self.params = params
 
+	def equal_params(self, prms):
+		pairs = self.params.items()
+		ps = prms.items()
+
+		for pair in pairs:
+			for p in ps:
+				if pair[0] == p[0]:
+					if pair[1] != p[1]:
+						return False
+
+		return True
+
 	def getUpDict(self):
 		# return dict with name and params
 		# for further writing in JsonFile
@@ -26,14 +38,13 @@ class ADenoiser:
 		return self.name
 
 	def disp_parameters(self):
-		pass
+		return self.params
 
 	def denoise(self, image):
 		pass
 
 	def __str__(self):
 		info = "Name of alg: " + self.name + "\n"
-
 		pairs = self.params.items()
 
 		for pair in pairs:
