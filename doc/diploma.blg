@@ -6,24 +6,45 @@ A level-1 auxiliary file: descriptionalgorithm.aux
 A level-1 auxiliary file: measure.aux
 A level-1 auxiliary file: research.aux
 A level-1 auxiliary file: conclusion.aux
-A level-1 auxiliary file: application.aux
 The style file: utf8gost705u.bst
 Database file #1: biblio.bib
-I was expecting a `,' or a `}'---line 12 of file biblio.bib
- : 
- : title = 'Guided Image Filtering'
-(Error may have been on previous line)
-I'm skipping whatever remains of this entry
 Warning--entry type for "web:Kalinkina" isn't style-file defined
---line 17 of file biblio.bib
-I was expecting a `,' or a `)'---line 28 of file biblio.bib
+--line 20 of file biblio.bib
+I was expecting a `,' or a `}'---line 27 of file biblio.bib
  : 
- : title = "SURVEY ON VARIOUS NOISES AND TECHNIQUES FOR DENOISING THE COLOR IMAGE",
+ : url = {\url{http://masters.donntu.org/2013/fknt/lashchenko/library/ni.pdf}}
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-Warning--empty title in Noise
-Warning--empty journal in Noise
-Warning--empty title in He
+"{" immediately follows a field part---line 53 of file biblio.bib
+ :  url=\url
+ :          {https://doi.org/10.1007/978-0-387-31439-6_482}
+I'm skipping whatever remains of this entry
+Warning--entry type for "imageNet" isn't style-file defined
+--line 56 of file biblio.bib
+"{" immediately follows a field part---line 58 of file biblio.bib
+ :   url=\url
+ :           {http://www.image-net.org}
+I'm skipping whatever remains of this entry
+Warning--entry type for "youtube8m" isn't style-file defined
+--line 61 of file biblio.bib
+"{" immediately follows a field part---line 63 of file biblio.bib
+ :   url=\url
+ :           {https://research.google.com/youtube8m/}
+I'm skipping whatever remains of this entry
+"{" immediately follows a field part---line 94 of file biblio.bib
+ : url=\url
+ :         {https://doi.org/10.1186/s13640-018-0264-z}
+I'm skipping whatever remains of this entry
+Warning--entry type for "bm3dCircuit" isn't style-file defined
+--line 125 of file biblio.bib
+I was expecting an "="---line 126 of file biblio.bib
+ : title 
+ :       "BM3D circuit"
+I'm skipping whatever remains of this entry
+Warning--empty journal in Gonzalez
+Warning--empty journal in gauss
+Warning--empty booktitle in bilateral
+Warning--empty journal in He
 Name 1 in "K. Dabov, A. Foi, V. Katkovnik, and K. Egiazarian" has a comma at the end for entry dabov
 while executing---line 1510 of file utf8gost705u.bst
-(There were 3 error messages)
+(There were 7 error messages)

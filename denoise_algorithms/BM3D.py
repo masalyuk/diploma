@@ -125,6 +125,8 @@ class BM3D(ADenoiser):
 		for i in range(blk_num):
 			for j in range(blk_num):
 				search_img = img[window_x:window_x + blk_size, window_y:window_y + blk_size]
+				if search_img % 2 is not 0:
+					continue
 				dct_search_img = cv2.dct(search_img.astype(numpy.float64))
 				distance = numpy.linalg.norm((dct_img - dct_search_img)) ** 2 / (blk_size ** 2)
 				if 0 < distance < Threshold:
@@ -226,6 +228,8 @@ class BM3D(ADenoiser):
 		for i in range(blk_num):
 			for j in range(blk_num):
 				search_img = basic_img[window_x:window_x + blk_size, window_y:window_y + blk_size]
+				if search_img % 2 is not 0:
+					continue
 				dct_search_img = cv2.dct(search_img.astype(numpy.float64))
 				distance = numpy.linalg.norm((dct_img - dct_search_img)) ** 2 / (blk_size ** 2)
 

@@ -1,4 +1,4 @@
-@BOOK{Gonzalez,
+@article{Gonzalez,
 author = "Гонсалес Р. and Вудс Р.",
 title = "Цифровая обработка изображений",
 address = "М.",
@@ -7,30 +7,76 @@ year = 2005,
 numpages = 1072,
 language = "russian"
 }
-@BOOK{He,
-author = "He K. and Sun J. and Tang X. "
-title = 'Guided Image Filtering'
-year = 2013
-note = " // Proc. IEEE Transactions on
-Pattern Analysis and Machine Intelligence. 2013. V.35. N.6. P. 1397-1409."
+
+@article{He,
+author = "He K. and Sun J. and Tang X. ",
+title = "Guided Image Filtering",
+year = 2013,
+note = " // Proc. IEEE Transactions on,
+Pattern Analysis and Machine Intelligence. 2013. V.35. N.6. P. 1397-1409.",
+language = "english",
 }
+
 @MISK{web:Kalinkina,
 author = "Калинкина Д. and Д. Ватолин",
 title = "Проблема подавления шума на изображениях и
 видео и различные подходы к ее решению.",
 language = "russian",
 year = 2005,
-note = "{http://masters.donntu.org/2013/fknt/lashchenko/library/ni.pdf} дата обращения 02.05.2019"
+urldate = {2018-12-10}
+url = {\url{http://masters.donntu.org/2013/fknt/lashchenko/library/ni.pdf}}
 }
 
-@article(Noise,
-author = "Rohankar and Jayant"
+@article{Noise,
+author = "Mohd Awais Farooque and Jayant S.Rohankar",
 title = "SURVEY ON VARIOUS NOISES AND TECHNIQUES FOR DENOISING THE COLOR IMAGE",
-journal = "International Journal of Application or Innovation in Engineering & Management. 2 (11)",
-year ="2013",
-month="Nov"
-
+journal = "International Journal of Application or Innovation in Engineering \& Management (IJAIEM)",
+year="2013",
+month="Nov",
+volume="2",
+language = "english",
+issn="2319-4847",
 }
+
+@Inbook{poisson,
+	author="Hasinoff, Samuel W.",
+	editor="Ikeuchi, Katsushi",
+	title="Photon, Poisson Noise",
+	bookTitle="Computer Vision: A Reference Guide",
+	year="2014",
+	publisher="Springer US",
+	address="Boston, MA",
+	pages="608--610",
+	isbn="978-0-387-31439-6",
+	doi="10.1007/978-0-387-31439-6_482",
+	language = "english",
+	url=\url{https://doi.org/10.1007/978-0-387-31439-6_482}
+}
+
+@MISK{imageNet,
+  title = {ImageNet},
+  url=\url{http://www.image-net.org}
+}
+
+@MISK{youtube8m,
+  title = {YouTube-8M Dataset},
+  url=\url{https://research.google.com/youtube8m/}
+}
+
+@INPROCEEDINGS{ssim, 
+author={N. {Ponomarenko} and O. {Ieremeiev} and V. {Lukin} and K. {Egiazarian} and M. {Carli}}, 
+booktitle={2011 11th International Conference The Experience of Designing and Application of CAD Systems in Microelectronics (CADSM)}, 
+title={Modified image visual quality metrics for contrast change and mean shift accounting}, 
+year={2011}, 
+volume={}, 
+number={}, 
+pages={305-311}, 
+keywords={image colour analysis;image visual quality metrics;contrast change;mean shift accounting;graphical information;color images;CAD;telecommunication systems;image quality;image visual quality assessment;objective metrics;Measurement;Noise;Transform coding;Visualization;Image coding;Nonlinear distortion;Databases;Visual quality;distorted images;metrics}, 
+doi={}, 
+ISSN={}, 
+month={Feb},}
+
+
 @article{Hasan2018,
 author="Hasan, Mahmud
 and El-Sakka, Mahmoud R.",
@@ -45,17 +91,62 @@ pages="25",
 abstract="Image denoising is considered a salient pre-processing step in sophisticated imaging applications. Over the decades, numerous studies have been conducted in denoising. Recently proposed Block matching and 3D (BM3D) filtering added a new dimension to the study of denoising. BM3D is the current state-of-the-art of denoising and is capable of achieving better denoising as compared to any other existing method. However, there is room to improve BM3D to achieve high-quality denoising. In this study, to improve BM3D, we first attempted to improve the Wiener filter (the core of BM3D) by maximizing the structural similarity (SSIM) between the true and the estimated image, instead of minimizing the mean square error (MSE) between them. Moreover, for the DC-only BM3D profile, we introduced a 3D zigzag thresholding. Experimental results demonstrate that regardless of the type of the image, our proposed method achieves better denoising performance than that of BM3D.",
 issn="1687-5281",
 doi="10.1186/s13640-018-0264-z",
-url="https://doi.org/10.1186/s13640-018-0264-z"
+url=\url{https://doi.org/10.1186/s13640-018-0264-z}
 }
 
+@article{gauss,
+ author = "Вентцель Е. С.",
+ title = "Теория вероятностей.",
+ address = "М.",
+publisher = "Academia",
+ numpages = 576,
+ language = "russian",
+ year = "2005",
+ edition = 10,
+ isbn = "5-7695-2311-5"
+}
+ 
 @article{dabov, 
  title = {Image denoising by sparse 3D transform-domain collaborative filtering},
  author  = {K. Dabov, A. Foi, V. Katkovnik, and K. Egiazarian},
- journal = {{IEEE Trans. Image Process.}},
+ journal = {IEEE Trans. Image Process.},
  volume  = {16},
  pages   = {2080-2095},
  year    = {2007},
+ language = "english",
 }
+
+@MISC{mad,
+    author = {Aram Danielyan and Alessandro Foi},
+    title = {NOISE VARIANCE ESTIMATION IN NONLOCAL TRANSFORM DOMAIN},
+    year = {}
+}
+
+@MISK{bm3dCircuit,
+title "BM3D circuit"
+url = \url{https://www.researchgate.net/figure/BM3D-Block-Diagram-Dabov-et-al-2007c_fig1_301721957}
+}
+
+@INPROCEEDINGS{non-local,
+    author = {Antoni Buades and Bartomeu Coll},
+    title = {A non-local algorithm for image denoising},
+    booktitle = {In CVPR},
+    year = {2005},
+    pages = {60--65}
+}
+
+@inproceedings{bilateral,
+author = {Tomasi, C and Manduchi, Roberto},
+year = {1998},
+month = {02},
+pages = {839-846},
+title = {Bilateral Filtering for Gray and Color Images},
+volume = {98},
+isbn = {81-7319-221-9},
+journal = {ICCV},
+doi = {10.1109/ICCV.1998.710815}
+}
+
 @article{bm3d,
     title   = {{An Analysis and Implementation of the BM3D Image Denoising Method}},
     author  = {Lebrun, Marc},

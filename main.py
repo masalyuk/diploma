@@ -114,11 +114,11 @@ def get_all_tv():
 def init_denoiser():
 	lDenoiser = list()
 
-	#lDenoiser.extend(get_all_guided())
-	#lDenoiser.extend(get_all_nlmean())
-	#lDenoiser.extend(get_all_tv())
-	lDenoiser.extend(get_all_bm3d())
-	#lDenoiser.extend(get_all_bilateral())
+	lDenoiser.extend(get_all_guided())
+	lDenoiser.extend(get_all_nlmean())
+	lDenoiser.extend(get_all_tv())
+	#lDenoiser.extend(get_all_bm3d())
+	lDenoiser.extend(get_all_bilateral())
 	return lDenoiser
 
 
@@ -161,6 +161,10 @@ def has_result_of_denoising(dir, den, img, var):
 				return True
 
 	return False
+
+def load_noised_image_by_var(path):
+	img=os.listdir(path)
+	return cv2.imread(join_dirs(path, img[0]))
 
 def load_noised_image(dir, img, var):
 	type = img.get_type()
@@ -413,6 +417,60 @@ def plot_for_tv(common, dir_res, type_im, var, measure, mode):
 								 measure=measure, fip=(name_fix_param, value_fix_pram),
 							 		flp=flow_param, mode=mode)
 
+
+
+def find_max_measure(common, path_to_result, img, var, measure="PSNR"):
+	path_to_denoised_images = join_dirs(path_to_result, IMAGE)
+
+	max = -1
+	max_img = ""
+	val = -1
+	path_to_orig = join_dirs(*tuple(path_to_result.replace("result","images").split("\\")[1:4]))
+	orig_image = cv2.imread(path_to_orig)
+	for img in os.listdir(path_to_denoised_images):
+		path_to_image = join_dirs(path_to_denoised_images, img)
+		if measure=="PSNR":
+
+			val = common.PSNR(cv2.imread(path_to_image), orig_image)
+		else:
+			val = common.SSIM(cv2.imread(path_to_image), orig_image)
+
+		if val > max:
+			max = val
+			max_img  = img
+
+	return max
+
+
+def find_max_alg(common, path_to_image_with_var, img,  var, measure="PSNR"):
+	path_to_alg = join_dirs(path_to_image_with_var, DENOISED)
+	algs = os.listdir(path_to_alg)
+	max = -1
+	for alg in algs:
+
+		path_to_result = join_dirs(path_to_alg, alg)
+		val = find_max_measure(common, path_to_result, img, var, measure)
+
+		if val > max:
+			max = val
+			max_alg = alg
+
+	return max_alg
+
+def count_res(common, dir_res, class_image, var, measure="PSNR"):
+	path_to_images = join_dirs(dir_res, class_image)
+	res_algs = {}
+	imgs = os.listdir(path_to_images)
+
+	for img in imgs:
+		name_alg = find_max_alg(common, join_dirs(path_to_images, img, str(var)),img,var, measure)
+		if res_algs.get(name_alg) is None:
+			res_algs[name_alg] = 1
+		else:
+			res_algs[name_alg] = res_algs[name_alg] + 1
+
+	print(res_algs)
+
 def main():
 	common = Common()
 	dir_res = RESULT_DIR
@@ -420,18 +478,25 @@ def main():
 	lAlg = init_denoiser()
 	lVar = [0.005,0.01, 0.1, 0.4]
 	lImg = init_images()
-
+	lMeasures = ["PSNR", "SSIM"]
+	cats = ["architecture", "night", "person"]
 	denoise_and_save_result(common, dir_res, lAlg, lImg, lVar)
+	for cat in cats:
+		for var in lVar:
+			for meas in lMeasures:
+				print("For: " + cat + " with " + str(var))
+				print(meas)
+				count_res(common,dir_res, cat, str(var), meas)
 	#mode = "all" or "average"
 	#measure = "PSNR" or "SSIM"
-	type_im = "night"
-	measure = "PSNR"
-	mode = "all"
-	alg_plot = "Guided"
-	if alg_plot == "Guided":
-		plot_for_guided(common, dir_res, type_im, lVar[0], measure=measure, mode=mode)
-	elif(alg_plot == "TV"):
-		plot_for_tv(common, dir_res, type_im, lVar[0], measure=measure, mode=mode)
+	#type_im = "night"
+	#measure = "PSNR"
+	#mode = "all"
+	#alg_plot = "Guided"
+	#if alg_plot == "Guided":
+	#	plot_for_guided(common, dir_res, type_im, lVar[0], measure=measure, mode=mode)
+	#elif(alg_plot == "TV"):
+		#plot_for_tv(common, dir_res, type_im, lVar[0], measure=measure, mode=mode)
 
 	#
 	#

@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 \def\selectlanguageifdefined#1{
 \expandafter\ifx\csname date#1\endcsname\relax
 \else\language\csname l@#1\endcsname\fi}
@@ -13,24 +13,85 @@
   подавления шума на изображениях и видео и
   различные подходы к ее решению.
 \newblock 2005.
-\newblock {http://masters.donntu.org/2013/fknt/lashchenko/library/ni.pdf}
-  дата обращения 02.05.2019.
 
 \bibitem{Noise}
+\selectlanguageifdefined{english}
+Farooque~M.~A., S.Rohankar~J. SURVEY ON VARIOUS NOISES AND TECHNIQUES FOR
+  DENOISING THE COLOR IMAGE~// International Journal of Application or
+  Innovation in Engineering \& Management (IJAIEM).
+\newblock 2013.  Nov.
+\newblock Vol.~2.
+
+\bibitem{Gonzalez}
 \selectlanguageifdefined{russian}
-Rohankar, Jayant.
+Р.~Гонсалес, Р.~Вудс. Цифровая обработка
+  изображений.
+\newblock М., 2005.
+\newblock 1072~{с.}
+
+\bibitem{gauss}
+\selectlanguageifdefined{russian}
+С.~Вентцель~Е. Теория вероятностей.
+\newblock М., 2005.
+\newblock 576~{с.}
+
+\bibitem{poisson}
+\selectlanguageifdefined{english}
+Hasinoff~S.~W. Photon, Poisson Noise~// Computer Vision: A Reference Guide~/
+  Ed. by K.~Ikeuchi.
+\newblock Boston, MA: Springer US, 2014.
+\newblock P.~608--610.
+
+\bibitem{imageNet}
+\selectlanguageifdefined{russian}
+ImageNet.
+
+\bibitem{bilateral}
+\selectlanguageifdefined{russian}
+Tomasi~C, Manduchi~Roberto. Bilateral Filtering for Gray and Color Images.
+\newblock Т.~98.
+\newblock 1998.  02.
+\newblock {С.}~839--846.
 
 \bibitem{He}
+\selectlanguageifdefined{english}
+K.~H., J.~S., X.~T. Guided Image Filtering.
+\newblock 2013.
+\newblock // Proc. IEEE Transactions on, Pattern Analysis and Machine
+  Intelligence. 2013. V.35. N.6. P. 1397-1409.
+
+\bibitem{non-local}
 \selectlanguageifdefined{russian}
-K.~He, J.~Sun, X.~Tang.
+Buades~Antoni, Coll~Bartomeu. A non-local algorithm for image denoising~// In
+  CVPR.
+\newblock 2005.
+\newblock {С.}~60--65.
+
+\bibitem{Hasan2018}
+\selectlanguageifdefined{russian}
+Hasan~Mahmud, El-Sakka~Mahmoud~R. Improved BM3D image denoising using
+  SSIM-optimized Wiener filter~// EURASIP Journal on Image and Video
+  Processing.
+\newblock 2018.  Apr.
+\newblock Т. 2018, {№}~1.
+\newblock {с.}~25.
+
+\bibitem{bm3dCircuit}
+\selectlanguageifdefined{russian}
+
+
+\bibitem{mad}
+\selectlanguageifdefined{russian}
+Danielyan~Aram, Foi~Alessandro. NOISE VARIANCE ESTIMATION IN NONLOCAL TRANSFORM
+  DOMAIN.
 
 \bibitem{dabov}
-\selectlanguageifdefined{russian}
-K.~Dabov~A.~Foi~V.~Katkovnik, Egiazarian~K. Image denoising by sparse 3D
-  transform-domain collaborative filtering~// {IEEE Trans. Image Process.}
+\selectlanguageifdefined{english}
+K.~Dabov~A.~Foi~V.~K., Egiazarian~K. Image denoising by sparse 3D
+  transform-domain collaborative filtering~// IEEE Trans. Image Process.
 \newblock 2007.
-\newblock Т.~16.
-\newblock {С.}~2080--2095.
+\newblock Vol.~16.
+\newblock P.~2080--2095.
 
 \bibitem{bm3d}
 \selectlanguageifdefined{russian}
@@ -39,5 +100,18 @@ Lebrun~Marc. {An Analysis and Implementation of the BM3D Image Denoising
 \newblock 2012.
 \newblock Т.~2.
 \newblock {С.}~175--213.
+
+\bibitem{ssim}
+\selectlanguageifdefined{russian}
+Modified image visual quality metrics for contrast change and mean shift
+  accounting~/ N.~{Ponomarenko}, O.~{Ieremeiev}, V.~{Lukin} {[и~др.]}~//
+  2011 11th International Conference The Experience of Designing and
+  Application of CAD Systems in Microelectronics (CADSM).
+\newblock 2011.  Feb.
+\newblock {С.}~305--311.
+
+\bibitem{youtube8m}
+\selectlanguageifdefined{russian}
+YouTube-8M Dataset.
 
 \end{thebibliography}
