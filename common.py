@@ -27,7 +27,7 @@ class Common:
 		:param nimg: noised image
 		:return: return value of PSNR
 		'''
-		return psnr(img, nimg)
+		return psnr(img, nimg, data_range=255)
 
 	def get_result(self):
 		'''

@@ -1,7 +1,7 @@
 #https://github.com/pfchai/GuidedFilter # for check implementation
 import numpy
 import cv2
-from cv2.ximgproc import guidedFilter
+#from cv2.ximgproc import guidedFilter
 from denoise_algorithms.ADenoiser import *
 
 class Guided(ADenoiser):
@@ -45,5 +45,5 @@ class Guided(ADenoiser):
 		denoised_im = numpy.zeros_like(image)
 
 		denoised_im = self.alg(image/255, image/255, self.params["radius"], self.params["eps"])
-		return denoised_im * 255
+		return (denoised_im * 255).astype("uint8")
 

@@ -1,12 +1,15 @@
 import cv2
+import numpy
+from common import *
+from  skimage.util import  random_noise
+from skimage.restoration  import  denoise_nl_means
+from denoise_algorithms.Bilateral import *
+PATH = "C:\\Users\\nikit\\PycharmProjects\\diploma\\doc\\img\\"
+orig_image = cv2.imread(PATH + "orig.jpg")
+noised_image = cv2.imread(PATH + "tv2.png")
 
-path_to_noised_image = "D:/result/person/3526532800_baf1cb40ff.jpg/0.01/noised/3526532800_baf1cb40ff.jpg"
-noised_image = cv2.imread(path_to_noised_image)
 
-boxR = [11,13,21]
-
-for r in boxR:
-	denoised = cv2.medianBlur(noised_image, ksize=r)
-	#denoised = cv2.GaussianBlur(noised_image,ksize=(3*r,3*r) ,sigmaX=r)
-	#denoised = cv2.boxFilter(noised_image,ddepth=-1,ksize=(r,r))
-	cv2.imwrite("median"+str(r)+".png", denoised)
+common = Common()
+print(common.PSNR(orig_image, noised_image))
+#27.93
+#24.95

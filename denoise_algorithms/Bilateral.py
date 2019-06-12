@@ -30,7 +30,8 @@ class Bilateral(ADenoiser):
 		return numpy.sqrt(numpy.abs((x1 - x2) ** 2 - (y1 - y2) ** 2))
 
 	def denoise(self, dataImage):
-		denoise_image = self.__bilateral_filter(dataImage.copy(), self.params["diameter"], self.params["sigma_i"], self.params["sigma_s"])
+		#denoise_image = self.__bilateral_filter(dataImage.copy(), self.params["diameter"], self.params["sigma_i"], self.params["sigma_s"])
+		denoise_image = cv2.bilateralFilter(src=dataImage.copy(),sigmaColor=self.params["sigma_i"], sigmaSpace=self.params["sigma_s"],d=self.params["diameter"])
 		return denoise_image.astype("uint8")
 
 	def __bilateral_filter(self, image, diameter, sigma_i, sigma_s):

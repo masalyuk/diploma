@@ -26,13 +26,22 @@ Farooque~M.~A., S.Rohankar~J. SURVEY ON VARIOUS NOISES AND TECHNIQUES FOR
 \selectlanguageifdefined{russian}
 Р.~Гонсалес, Р.~Вудс. Цифровая обработка
   изображений.
-\newblock М., 2005.
+\newblock М.: Техносфера, 2005.
 \newblock 1072~{с.}
+
+\bibitem{Polupro}
+\selectlanguageifdefined{russian}
+В.В.~Пасынков, Л.К.~Чиркин.
+  Полупроводниковые приборы.
+\newblock 6 {изд.}
+\newblock СПБ: Лань, 2002.
+\newblock {с.}~480.
 
 \bibitem{gauss}
 \selectlanguageifdefined{russian}
 С.~Вентцель~Е. Теория вероятностей.
-\newblock М., 2005.
+\newblock 10 {изд.}
+\newblock М.: Academia, 2005.
 \newblock 576~{с.}
 
 \bibitem{poisson}
@@ -42,9 +51,20 @@ Hasinoff~S.~W. Photon, Poisson Noise~// Computer Vision: A Reference Guide~/
 \newblock Boston, MA: Springer US, 2014.
 \newblock P.~608--610.
 
+\bibitem{Kumar}
+\selectlanguageifdefined{english}
+Garg~E.~R., Kumar~E.~A. COMPARISION OF VARIOUS NOISE REMOVALS USING BAYESIAN
+  FRAMEWORK~// International Journal of Modern Engineering Research(IJMER).
+\newblock 2012.  Jan-Feb.
+\newblock Vol.~2.
+
 \bibitem{imageNet}
 \selectlanguageifdefined{russian}
 ImageNet.
+
+\bibitem{FaceDetections}
+\selectlanguageifdefined{russian}
+Face Detection.
 
 \bibitem{bilateral}
 \selectlanguageifdefined{russian}
@@ -78,7 +98,7 @@ Hasan~Mahmud, El-Sakka~Mahmoud~R. Improved BM3D image denoising using
 
 \bibitem{bm3dCircuit}
 \selectlanguageifdefined{russian}
-
+BM3D circuit.
 
 \bibitem{mad}
 \selectlanguageifdefined{russian}
@@ -101,6 +121,10 @@ Lebrun~Marc. {An Analysis and Implementation of the BM3D Image Denoising
 \newblock Т.~2.
 \newblock {С.}~175--213.
 
+\bibitem{youtube8m}
+\selectlanguageifdefined{russian}
+YouTube-8M Dataset.
+
 \bibitem{ssim}
 \selectlanguageifdefined{russian}
 Modified image visual quality metrics for contrast change and mean shift
@@ -109,9 +133,5 @@ Modified image visual quality metrics for contrast change and mean shift
   Application of CAD Systems in Microelectronics (CADSM).
 \newblock 2011.  Feb.
 \newblock {С.}~305--311.
-
-\bibitem{youtube8m}
-\selectlanguageifdefined{russian}
-YouTube-8M Dataset.
 
 \end{thebibliography}

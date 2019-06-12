@@ -43,9 +43,9 @@ def get_all_bm3d():
 
 def get_all_nlmean():
 	l_Nl = []
-	lTmplSize = numpy.arange(start=3, stop=12, step=5)
-	lSrchSize = numpy.arange(start=10, stop=32, step=20)
-	lSim = numpy.arange(start=1, stop=3000, step=1000)
+	lTmplSize = [3,5,7]
+	lSrchSize = [5,7,11]
+	lSim = [30,35,30]
 
 	params = {}
 	for t_s in lTmplSize:
@@ -61,8 +61,8 @@ def get_all_nlmean():
 def get_all_guided():
 	l_Guided = []
 
-	lRad = numpy.arange(start=3, stop=10, step=2)
-	lEps = numpy.arange(start=0.1, stop=0.9, step=0.1)
+	lRad = numpy.arange(start=3, stop=8, step=2)
+	lEps = [0.3,0.5,0.8]
 
 	params = {}
 	for r in lRad:
@@ -78,11 +78,11 @@ def get_all_bilateral():
 	l_Bilateral = []
 
 	#lDiameters = numpy.arange(start=3, stop=9, step=2)
-	lDiameters = [3, 5]
+	lDiameters = [5,7,11,13]
 	#lInten = numpy.arange(start=50, stop=255, step=20)
-	lInten = [50,70]
+	lInten = [50,150,220]
 	#lRange = numpy.arange(start=1, stop=9, step=2)
-	lRange = [1, 5, 3]
+	lRange = [5, 7, 11]
 
 	params = {}
 	for diam in lDiameters:
@@ -430,7 +430,6 @@ def find_max_measure(common, path_to_result, img, var, measure="PSNR"):
 	for img in os.listdir(path_to_denoised_images):
 		path_to_image = join_dirs(path_to_denoised_images, img)
 		if measure=="PSNR":
-
 			val = common.PSNR(cv2.imread(path_to_image), orig_image)
 		else:
 			val = common.SSIM(cv2.imread(path_to_image), orig_image)
@@ -439,15 +438,17 @@ def find_max_measure(common, path_to_result, img, var, measure="PSNR"):
 			max = val
 			max_img  = img
 
+
 	return max
 
 
-def find_max_alg(common, path_to_image_with_var, img,  var, measure="PSNR"):
+def find_max_alg(common, path_to_image_with_var, img,  var, measure="PSNR", class_image=None):
 	path_to_alg = join_dirs(path_to_image_with_var, DENOISED)
 	algs = os.listdir(path_to_alg)
 	max = -1
 	for alg in algs:
-
+		if alg == "BM3D":
+			continue
 		path_to_result = join_dirs(path_to_alg, alg)
 		val = find_max_measure(common, path_to_result, img, var, measure)
 
@@ -455,6 +456,19 @@ def find_max_alg(common, path_to_image_with_var, img,  var, measure="PSNR"):
 			max = val
 			max_alg = alg
 
+	#check psnr or ssim with noised image
+	path_to_noised = join_dirs(path_to_image_with_var, NOISED, img)
+
+	orig_image  = cv2.imread(join_dirs(RESULT_DIR, class_image, img))
+	noised_image = cv2.imread(path_to_noised)
+	if measure == "PSNR":
+		val = common.PSNR(noised_image, orig_image)
+	else:
+		val = common.SSIM(noised_image, orig_image)
+
+	if val > max:
+		max = val
+		max_alg = "WO alg"
 	return max_alg
 
 def count_res(common, dir_res, class_image, var, measure="PSNR"):
@@ -463,7 +477,7 @@ def count_res(common, dir_res, class_image, var, measure="PSNR"):
 	imgs = os.listdir(path_to_images)
 
 	for img in imgs:
-		name_alg = find_max_alg(common, join_dirs(path_to_images, img, str(var)),img,var, measure)
+		name_alg = find_max_alg(common, join_dirs(path_to_images, img, str(var)),img,var, measure,class_image=class_image)
 		if res_algs.get(name_alg) is None:
 			res_algs[name_alg] = 1
 		else:
@@ -476,11 +490,12 @@ def main():
 	dir_res = RESULT_DIR
 
 	lAlg = init_denoiser()
-	lVar = [0.005,0.01, 0.1, 0.4]
+	lVar = [0.0001,0.005, 0.055, 0.15, 0.6]
 	lImg = init_images()
 	lMeasures = ["PSNR", "SSIM"]
 	cats = ["architecture", "night", "person"]
 	denoise_and_save_result(common, dir_res, lAlg, lImg, lVar)
+
 	for cat in cats:
 		for var in lVar:
 			for meas in lMeasures:

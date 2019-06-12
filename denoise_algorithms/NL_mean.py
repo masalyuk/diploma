@@ -26,7 +26,7 @@ class NL_mean(ADenoiser):
 		denoised_im = cv2.fastNlMeansDenoisingColored(dataImage.astype("uint8").copy(),\
 													  templateWindowSize=self.params["template_size"], \
 													  searchWindowSize=self.params["search_size"],\
-													  h=self.params["similar"])
+													  h=self.params["similar"],hColor=self.params["similar"])
 
 
 		return denoised_im

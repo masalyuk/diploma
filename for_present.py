@@ -1,85 +1,48 @@
-import cv2
+import math
+from denoise_algorithms.NL_mean import *
+from common import *
 from  skimage.util import  random_noise
 import matplotlib.pyplot as plt
-import numpy
-from denoise_algorithms.Bilateral import *
+import cv2
 
-def read_image(name):
-	return cv2.imread(name)
+path_to_image = "C:\\Users\\nikit\\PycharmProjects\\diploma\\images\\person\\3174790355_2d71cc35bd.jpg"
+def fix_diam_sigma_i():
+    l_Bilateral=[]
+    ps  = range(1,15,1)
+    params = {}
 
-def add_noise(image, type="g", var=0.005):
-	if type == "g":
-		return random_noise(image, mode='gaussian', var=var)
-	elif(type == "p"):
-		return random_noise(image, mode='poisson')
-	else:
-		return random_noise(image, mode='s&p')
+    t_s = 7
+    s_s = 11
+    sim = 35
+    for t_s in ps:
+        params["template_size"] = t_s
+        params["search_size"] = s_s
+        params["similar"] = sim
+        l_Bilateral.append(NL_mean(params.copy()))
 
-KERNEL_SIZE = 11
-def gaus(image, kernel):
-	return cv2.GaussianBlur(image, ksize=(kernel,kernel), sigmaX=0)
+    return (l_Bilateral, ps)
 
-def box(img):
-	return cv2.boxFilter(img,ksize=(KERNEL_SIZE,KERNEL_SIZE), ddepth=-1)
+psnrs=[]
+params=[]
 
-def median(img):
-	return cv2.medianBlur(img, ksize=KERNEL_SIZE)
+common = Common()
 
-def save_iamge(img, name):
-	cv2.imwrite(name, img)
+orig_image = cv2.imread(path_to_image)
+noised_image = common.add_noise(orig_image, 0.05)
 
+(lBil, params) = fix_diam_sigma_i()
+i = 0
+for bil in lBil:
+    denoised = bil.denoise(noised_image)
 
-sigmas = [0.01, 0.05, 0.15]
-original = read_image("C:/Users/nikit/PycharmProjects/diploma/nikita.jpg")
+    cv2.imwrite("bil"+str(i+1)+".png", denoised)
+    i = i + 1
+    psnr = common.PSNR(denoised, orig_image)
 
-imgs_n = list()
-name_imgs = list()
-for sigma in sigmas:
-	imgs = numpy.clip(add_noise(original, type='g', var=sigma) * 255, 0, 255).astype("uint8")
-	imgs_n.append(imgs)
-
-	name_file = "nikita" + str(sigma)
-	name_imgs.append(name_file)
-
-	save_iamge(imgs, name_file + ".png")
-
-radiuses = [3, 5, 7 , 11, 13 , 15, 17, 21]
-
-for radius in radiuses:
-	i = 0
-	params = {}
-	for img in imgs_n:
-		img_d = gaus(img, radius)
-		#params["diameter"] = radius
-		#params["sigma_i"] = 5
-		#params["sigma_s"] = 5
-
-		#b = Bilateral(params)
-		#img_d = b.denoise(img)
-
-
-		save_iamge(img_d, str(radius) + name_imgs[i] + ".png")
-		i = i + 1
+    psnrs.append(psnr)
 
 
 
-
-# image = numpy.clip(read_image("C:/Users/nikit/PycharmProjects/diploma/test_im/lena512.png") - 255,0,255)
-# image = image[:,:,0]
-#
-# img_g = numpy.clip(add_noise(image, type='g') * 255,0,255).astype("uint8")
-# save_iamge(numpy.clip(add_noise(image, type='p') * 255,0,255).astype("uint8"),"imgpppp.png")
-# save_iamge(img_g, "img.png")
-# save_iamge(median(img_g), "imgmedian.png")
-# save_iamge(box(img_g), "imgbox.png")
-# save_iamge(gaus(img_g), "imggaus.png")
-#
-#
-# img_s = numpy.clip(add_noise(image, type='s') * 255,0,255).astype("uint8")
-#
-# save_iamge(img_s, "simgs.png")
-# save_iamge(median(img_s), "simgmedian.png")
-# save_iamge(box(img_s), "simgbox.png")
-# save_iamge(gaus(img_s), "simggaus.png")
-
-
+#sort
+plt.plot(params,psnrs)
+plt.show()

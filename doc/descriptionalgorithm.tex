@@ -6,9 +6,10 @@
 Так же разделяются на тип обработки, существуют алгоритмы, которые обрабатывают изображение по пикселям или целыми блоками.
 К методом по пиксельной обработки относят: Total Variation.
 К блоковым: BM3D, Билатеральный, Guided, Non-Local Means.
+
 \subsection{Билатеральный фильтр}
 \subsubsection{Основная идея}
-Билатеральный фильтр относится к нелинейным фильтрам, которые сохраняют края и также является некоторым улучшением фильтра гаусса. В билатеральном фильтре фильтрация происходит как в пространственной области, так и в цветовой. То есть, влияние пикселя в окрестности некоторого пикселя , для которого вычисляется новое значение будет тем меньше, чем больше разница между интенсивностями и соотвественно чем больше расстояние между ними\cite{bilateral}.
+Билатеральный фильтр относится к нелинейным фильтрам, которые сохраняют края и также является некоторым улучшением фильтра гаусса.  При работе фильтра учитывается расстояние до соседнего пикселя и близость значений фильтруемого пикселя и соседнего из окрестности. То есть, влияние пикселя в окрестности некоторого пикселя , для которого вычисляется новое значение будет тем меньше, чем больше разница между интенсивностями и чем больше расстояние между ними\cite{bilateral}.
 \subsubsection{Описание}
 Нахождения нового значения для пикселя, можно описать следующей формулой:
 \begin{equation}
@@ -18,6 +19,7 @@ x(u) = \frac{\sum_{p\in N(u)}W_c(\parallel p - u\parallel)W_s(\mid y(u) - y(p)\m
 где
 \begin{itemize}
 \item x(u) - новое значение пикселя
+\item p - пиксель исходного изображения
 \item u - пиксель, для которого высчитывается новое значение
 \item y(u) и y(p) - значения пикселей в исходном изображении
 \item N(u) - окрестность пикселя u
@@ -42,19 +44,28 @@ x(u) = \frac{\sum_{p\in N(u)}W_c(\parallel p - u\parallel)W_s(\mid y(u) - y(p)\m
 \subsubsection{Результат работы фильтра}
 После применения билатерального фильтра c различными параметрами были получены следующие результаты.
 
-\begin{figure}[H]\label{img:bilRes}
-	\begin{minipage}[H]{0.49\linewidth}
-		\center{\includegraphics[draft, scale=0.7]{bil1.jpeg} \\ а) Параметры 1}
-	\end{minipage}
-	\begin{minipage}[H]{0.49\linewidth}
-		\center{\includegraphics[draft, scale=0.7]{bil2.jpeg} \\ б) Параметры 2}
-	\end{minipage}
+
+\begin{figure}[H]
+	\centering
+	\subfigure[]{\includegraphics[scale=0.45]{orig}
+		\label{img:orig3}
+	}
+	\hspace{0.0125ex}
+	\subfigure[]{\includegraphics[scale=0.45]{bil1}
+		\label{img:bil1}
+	}
+	\hspace{0.0125ex}
+	\subfigure[]{\includegraphics[scale=0.45]{bil2}
+		\label{img:bil2}
+	}
+	\caption{Результаты работы билатерального фильтра: \subref{img:orig3} оригинал; \subref{img:bil1} $radius=11$, $\sigma_s=100$, $\sigma_c=3$; \subref{img:bil2} $radius=11$, $\sigma_s=50$, $\sigma_c=11$}
 \end{figure}
+Для рис. \ref{img:bil1} PSNR$=28.79$, а для \ref{img:bil2} PSNR$=29.40$.
 
 
 \subsection{Guided фильтр}
 \subsubsection{Основная идея}
-Идея заключается в том, что бы найти линейную зависимость определенного блока пикселей исходного изображения с таким же блоком в управляемом изображении. Применяя данную задачу к проблеме шумоподавления, в качестве управляемого изображения используется зашумленное изображение.
+Идея заключается в том, что бы найти линейную зависимость определенного блока пикселей исходного изображения с таким же блоком в управляемом изображении. Применяя данную задачу к проблеме шумоподавления, в качестве управляемого изображения используется зашумленное изображение.\cite{He}
 \subsubsection{Описание}
 Запишем линейную зависимость между пикселем на выходе фильтра и пикселем управляемого изображение в определенном окне следующим образом:
 \begin{equation}\label{eq:Guided}
@@ -68,7 +79,7 @@ x(u) = \frac{\sum_{p\in N(u)}W_c(\parallel p - u\parallel)W_s(\mid y(u) - y(p)\m
 	\item $\omega_k$ - окно с центром в пикселе $k$
 \end{itemize}
 Обычно в качестве окна используют квадрат с радиусом $r$.
-Для того, что бы определить линейные коэффициенты рассмотрим уравнение, которое минимизирует разницу между итоговым изображением $q$ и входным изображением $p$. Введем следующую целевую функцию\cite{He}:
+Для того, что бы определить линейные коэффициенты рассмотрим уравнение, которое минимизирует разницу между итоговым изображением $q$ и входным изображением $p$. Введем следующую целевую функцию:
 \begin{equation}
 	E(a_k,b_k) = \sum_{i\in \omega_k}((a_kI_i+b_k)^2+\varepsilon a_k^2)
 \end{equation}
@@ -100,19 +111,28 @@ b_k=\overline{p}_k-a_k\mu_k
 
 Главное особенностью данного фильтра является то, что его сложность зависит только от количества пикселей в изображении, т.е. $O(n)$ где $n$ - количество пикселей
 \subsubsection{Результат работы фильтра}
-
-\begin{figure}[H]\label{img:guidRes}
-	\begin{minipage}[H]{0.49\linewidth}
-		\center{\includegraphics[scale=0.5]{guided1} \\ а) Параметры 1}
-	\end{minipage}
-	\begin{minipage}[H]{0.49\linewidth}
-		\center{\includegraphics[scale=0.5]{guided2} \\ б) Параметры 2}
-	\end{minipage}
+\begin{figure}[H]
+	\centering
+	\subfigure[]{\includegraphics[scale=0.45]{orig}
+		\label{img:orig4}
+	}
+	\hspace{0.0125ex}
+	\subfigure[]{\includegraphics[scale=0.45]{guided1}
+		\label{img:guided1}
+	}
+	\hspace{0.0125ex}
+	\subfigure[]{\includegraphics[scale=0.45]{guided2}
+		\label{img:guided2}
+	}
+	\caption{Результаты работы guided фильтра: \subref{img:orig4} оригинал; \subref{img:guided1}  $r=5,\varepsilon=0.01$; \subref{img:guided2}$r=9,\varepsilon=0.04$}
+	\label{img:guidRes}
 \end{figure}
+Для рис. \ref{img:bil1} PSNR$=29.27$, а для \ref{img:guided2} PSNR$=25.51$.
+
 
 \subsection{Non-Local mean фильтр}
 \subsubsection{Основная идея}
-Обычно, новое значение пикселя берется как некое усредненное значение его соседей. К таким фильтрам относятся: билатеральный фильтр, "box" фильтр и фильтр гаусса. Развитием этой идеи стал фильтр NL-mean. Суть его заключается в том, что бы учитывать не только значения интенсивностей пикселей, но так же принимать во внимание схожесть окрестностей пикселей, что позволит наилучшим образом сказываться на сохранении краёв. 
+Обычно, новое значение пикселя берется как некое усредненное значение его соседей. К таким фильтрам относятся: билатеральный фильтр, фильтр скользящего среднего и фильтр Гаусса. Развитием этой идеи стал фильтр NL-mean. Суть его заключается в том, что бы учитывать не только значения интенсивностей пикселей, но так же принимать во внимание схожесть окрестностей пикселей, что позволит наилучшим образом сказываться на сохранении краёв.\cite{non-local}
 \subsubsection{Описание}
 Идею приведенную выше можно математически описать в следующем виде:
 \begin{equation}\label{eq:nl}
@@ -124,7 +144,7 @@ b_k=\overline{p}_k-a_k\mu_k
 \item $w(i,j)$ - весовая функция, которая сравнивает две области изображения, с центром в пикселе i и j
 \item $v(j)$ - интенсивность пикселя j
 \end{itemize}
-Уравнение \ref{eq:nl} указывает зависимость между значением итогового пикселя и всех пикселей исходного, зашумленного изображения\cite{non-local}:
+Уравнение \ref{eq:nl} указывает зависимость между значением итогового пикселя и всех пикселей исходного, зашумленного изображения:
 \begin{equation}
 	w(i,j) = \frac{exp(-\frac{\parallel{N(i)-N(j)}\parallel_{2,a}^2}{h})}{\sum_{j \in I}exp(-\frac{\parallel{N(i)-N(j)}\parallel_{2,a}^2}{h})}\
 \end{equation}
@@ -137,16 +157,23 @@ b_k=\overline{p}_k-a_k\mu_k
 Не трудно заметить, что сложность данного алгоритма $O(n^2(r*2+1))$, это приводит к значительным временным затратам даже для изображений малых размеров.
 Для уменьшения сложности вычисления, можно сделать следующие упрощения: можно заранее рассчитать все веса, так как область одного и того же пикселя может использоваться несколько раз, можно уменьшить окно поиска похожих патчей, т.е. теперь похожие патчи буду искаться не во всем изображении, а в некотором окне.  Так же можно сравнивать расстояния не для каждого пикселя, а через один, два и т.д. Тогда сложность будет= $O(n*N*(r*2+1))$, где N размер большого окна.
 \subsubsection{Результат работы фильтра}
-
-\begin{figure}[H]\label{img:nlRes}
-	\begin{minipage}[H]{0.49\linewidth}
-		\center{\includegraphics[draft, scale=0.7]{nl1.jpeg} \\ а) Параметры 1}
-	\end{minipage}
-	\begin{minipage}[H]{0.49\linewidth}
-		\center{\includegraphics[draft, scale=0.7]{nl2.jpeg} \\ б) Параметры 2}
-	\end{minipage}
+\begin{figure}[H]
+	\centering
+	\subfigure[]{\includegraphics[scale=0.45]{orig}
+		\label{img:orig6}
+	}
+	\hspace{0.0125ex}
+	\subfigure[]{\includegraphics[scale=0.45]{nl1}
+		\label{img:nl1}
+	}
+	\hspace{0.0125ex}
+	\subfigure[]{\includegraphics[scale=0.45]{nl2}
+		\label{img:nl2}
+	}
+	\caption{Результаты работы Non-Local mean фильтра: \subref{img:orig6} оригинал; \subref{img:nl1}  Размер шаблона$=3$, радиус поиска$=7$, $h=30$; \subref{img:nl2} Размер шаблона$=3$, радиус поиска$=11$, $h=30$}
+	\label{img:nlRes}
 \end{figure}
-
+Для рис. \ref{img:nl1} PSNR$=26.29$, а для \ref{img:nl2} PSNR$=25.03$.
 
 \subsection{BM3D}
 Фильтр BM3D можно считать более лучшей версией алгоритма Non-Local mean. В нём так же одним из ключевых моментов является
@@ -272,14 +299,20 @@ y(x) = \frac{\sum\limits_Pw_p^{wie}\sum\limits_{Q \in G_{wie}^{3D'}(P)}\chi_Q(x)
 	
 \end{tabular}
 \subsubsection{Результат работы фильтра}
-\begin{figure}[H]\label{img:bm3d}
-	\begin{minipage}[H]{0.49\linewidth}
-		\center{\includegraphics[draft, scale=0.7]{bm3d.jpeg} \\ а) Параметры 1}
-	\end{minipage}
-	\begin{minipage}[H]{0.49\linewidth}
-		\center{\includegraphics[draft, scale=0.7]{bm3d.jpeg} \\ б) Параметры 2}
-	\end{minipage}
+
+\begin{figure}[H]
+	\centering
+	\subfigure[]{\includegraphics[scale=0.45]{orig}
+		\label{img:orig7}
+	}
+	\hspace{0.0125ex}
+	\subfigure[]{\includegraphics[scale=0.45]{bm3d}
+		\label{img:bm3d}
+	}
+	\caption{Результаты работы BM3D фильтра: \subref{img:orig7} оригинал; \subref{img:bm3d} после BM3D фильтра}
+	\label{img:bm3dRes}
 \end{figure}
+Для рис. \ref{img:bm3d} PSNR$=32.18$.
 
 \subsection{Total Variation фильтр}
 \subsubsection{Основаная идея}
@@ -340,15 +373,25 @@ for  \;i \ge 0 \; with z^{(0)}=0\; and\;a\ge maxeig(A,A')
 
 
 \subsubsection{Результат работы фильтра}
-\begin{figure}[H]\label{img:tv}
-	\begin{minipage}[H]{0.49\linewidth}
-		\center{\includegraphics[scale=0.5]{tv1} \\ а) $\lambda=1$}
-	\end{minipage}
-	\begin{minipage}[H]{0.49\linewidth}
-		\center{\includegraphics[scale=0.5]{tv2} \\ б) $\lambda=0.6$}
-	\end{minipage}
-	\caption{Результаты работы фильтра на основе вариации функции с различными регуляризационными параметрами}
-\end{figure}
 
-\subsection{Заключение}
-В данном разделе была поставлена задача шумоподавления, были рассмотрены самые простые методы обработки изображений и выявлены их недостатки. Так же были классифицированны некоторые продвинутые методы шумоподавления. Были описаны основные идеи каждого фильтра и их математическое описания.
+
+\begin{figure}[H]
+	\centering
+	\subfigure[]{\includegraphics[scale=0.45]{orig}
+		\label{img:orig8}
+	}
+	\hspace{0.0125ex}
+	\subfigure[]{\includegraphics[scale=0.45]{tv1.png}
+		\label{img:tv1}
+	}
+	\hspace{0.0125ex}
+	\subfigure[]{\includegraphics[scale=0.45]{tv2.png}
+		\label{img:tv2}
+	}
+	\caption{Результаты работы фильтра на основе вариации функции с различными регуляризационными параметрам: \subref{img:orig8} оригинал; \subref{img:tv1} $\lambda=1$; \subref{img:tv1} $\lambda=0.6$}
+\end{figure}
+Для рис. \ref{img:tv1} PSNR$=27.93$, а для \ref{img:tv2} PSNR$=24.95$.
+
+% во всех главах
+\subsection{Выводы по разделу}
+В данном разделе была поставлена задача шумоподавления, были рассмотрены самые простые методы обработки изображений и выявлены их недостатки. Так же были классифицированны некоторые продвинутые методы шумоподавления. Были описаны основные идеи каждого фильтра и их математическое описание.

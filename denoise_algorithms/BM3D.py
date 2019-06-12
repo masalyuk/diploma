@@ -1,5 +1,7 @@
 import numpy
 import cv2
+
+
 from denoise_algorithms.ADenoiser import *
 # this code from https://github.com/wuqiyao20160118/
 # Parameters initialization
@@ -319,11 +321,11 @@ class BM3D(ADenoiser):
 
 	def denoise(self, dataImage):
 
-		denoised_img = numpy.zeros_like(dataImage)
-		final_denoised_img = numpy.zeros_like(dataImage)
-
-		for ch in range(3):
-			denoised_img[:,:,ch] = self.__BM3D_step_1(dataImage[:,:,ch])
-			final_denoised_img[:,:,ch] = self.__BM3D_step_2(denoised_img[:,:,ch], dataImage[:,:,ch])
+		denoised_img = numpy.zeros_like(dataImage[:,:,0])
+		final_denoised_img = numpy.zeros_like(dataImage[:,:,0])
+		final_denoised_img = bm3dDenoising(dataImage[:,:,0], final_denoised_img)
+		#for ch in range(3):
+			#denoised_img[:,:,ch] = self.__BM3D_step_1(dataImage[:,:,ch])
+			#final_denoised_img[:,:,ch] = self.__BM3D_step_2(denoised_img[:,:,ch], dataImage[:,:,ch])
 
 		return final_denoised_img
